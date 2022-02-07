@@ -55,7 +55,8 @@ for month in soup.find_all(class_ = 'calendarTable'):
                 # Extract Time #
                 time = re.match('(\d*:*\d* [ap].m.)', content)
                 if time:
-                    print(time.group(1))
+                    placeholder_variable = 0
+                    # print(time.group(1))
                 else:
                     time = None
                     # no time? what do store time as 0? or other placeholder that we understand to mean All-Day event
@@ -78,11 +79,11 @@ for date in dates:
     tempTuple += tuple([date])
 
 data = [x for x in zip(*[iter(dates)])]
-print(data)
+# print(data)
 
 mydb = mysql.connector.connect(host="boilermakerbuddydb.c8jck5ubwnj5.us-east-1.rds.amazonaws.com", user="admin", password="ECE49595!", database="boilermakerbuddydb")
 
-print(mydb)
+# print(mydb)
 
 mycursor = mydb.cursor()
 
