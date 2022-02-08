@@ -100,6 +100,7 @@ print(mycursor.rowcount, "record inserted.")
 
 
 
+
 #print(testlist)
            
       
