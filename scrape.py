@@ -1,8 +1,7 @@
 from bs4 import BeautifulSoup
+import mysql.connector
 import requests
 import re
-from collections import defaultdict
-import mysql.connector
 
 r = requests.get('https://www.purdue.edu/registrar/calendars/2021-22-Academic-Calendar.html')
 data = r.text
@@ -24,14 +23,14 @@ td = soup.find_all('h4')
 testlist = [] # for testing
 dates = []
 months = ['08', '09', '10', '11', '12', '01', '02', '03', '04', '05', '06', '07', '08']
-'''
+
 yearString = soup.find_all(class_ = "maincontent col-lg-9 col-md-9 col-sm-9 right").find_all("h1").contents[0].get_text()
-yearHyphenYear = re.match('(\d*)-(\d*)', yearString)
+yearHyphenYear = re.match('([0-9]*)-([0-9]*)', yearString)
 beginYear = yearHyphenYear.group(1)
 print("BEGIN YEAR: " + beginYear)
 endYear = yearHyphenYear.group(2)
 print("END YEAR: " + beginYear)
-'''
+
 
 
 # for a in soup.find_all(class_ = 'description col-lg-11 col-md-10 col-sm-10 col-xs-9'):
@@ -108,22 +107,6 @@ print(mycursor.rowcount, "record inserted.")
     # get day
     # get description
     # get weekday
-'''
-for description in month.find_all(class_ = 'description col-lg-11 col-md-10 col-sm-10 col-xs-9'):
-    # Get event name
-    ## TODO MESS WITH THIS LATER ##
-    time_text = description.find("strong").get_text()
-    match = time.findall(time_text)
-    # match = time.findall(description.get_text()) # times
-    # match = re.split(times, description.get_text(), 1)
-    print(match)
-for day in month.find_all(class_="day noGutterLeft col-lg-1 col-md-2 col-sm-2 col-xs-3"):
-    print(day.get_text())
-
-#for weekDay in month.find_all(class_ = 'weekDay noGutterLeft col-lg-1 col-md-2 col-sm-2 col-xs-3'):
-    # print(weekDay.get_text())
-# print(a.get_text())
-'''
 #print(td)
 
 
