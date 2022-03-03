@@ -1,18 +1,21 @@
-import ask_sdk
+# import ask_sdk
 from ask_sdk_core.skill_builder import SkillBuilder
-
-sb = SkillBuilder()
-
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
 from ask_sdk_core.utils import is_request_type, is_intent_name
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_model import Response
 from ask_sdk_model.ui import SimpleCard
+from ask_sdk_core.dispatch_components import AbstractExceptionHandler
+
+sb = SkillBuilder()
 
 class LaunchRequestHandler(AbstractRequestHandler):
+
+
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
         return is_request_type("LaunchRequest")(handler_input)
+
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -23,10 +26,14 @@ class LaunchRequestHandler(AbstractRequestHandler):
             False)
         return handler_input.response_builder.response
 
+
 class HelloWorldIntentHandler(AbstractRequestHandler):
+
+
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
         return is_intent_name("HelloWorldIntent")(handler_input)
+
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -37,10 +44,12 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
             True)
         return handler_input.response_builder.response
 
+
 class HelpIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
         return is_intent_name("AMAZON.HelpIntent")(handler_input)
+
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -50,10 +59,14 @@ class HelpIntentHandler(AbstractRequestHandler):
             SimpleCard("Hello World", speech_text))
         return handler_input.response_builder.response
 
+
 class CancelAndStopIntentHandler(AbstractRequestHandler):
+
+
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
         return is_intent_name("AMAZON.CancelIntent")(handler_input) or is_intent_name("AMAZON.StopIntent")(handler_input)
+
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -63,10 +76,14 @@ class CancelAndStopIntentHandler(AbstractRequestHandler):
             SimpleCard("Hello World", speech_text)).set_should_end_session(True)
         return handler_input.response_builder.response
 
+
 class SessionEndedRequestHandler(AbstractRequestHandler):
+
+
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
         return is_request_type("SessionEndedRequest")(handler_input)
+
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -74,13 +91,14 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
 
         return handler_input.response_builder.response
 
-from ask_sdk_core.dispatch_components import AbstractExceptionHandler
 
 class AllExceptionHandler(AbstractExceptionHandler):
+
 
     def can_handle(self, handler_input, exception):
         # type: (HandlerInput, Exception) -> bool
         return True
+
 
     def handle(self, handler_input, exception):
         # type: (HandlerInput, Exception) -> Response
