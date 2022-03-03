@@ -12,7 +12,7 @@ jobs:
       uses: alexanderdamiani/pylinter@v1.4.2
       with:
         python-root: '.'
-        flake8-flags: '--max-line-length=100 --exclude = C:\Users\drukk\OneDrive\Desktop\ECE 49595\boilermaker-buddy'
+        flake8-flags: '--max-line-length=100 --exclude=C:\Users\drukk\OneDrive\Desktop\ECE 49595\boilermaker-buddy\skill_env'
         mypy-flags: ''
         fail-on-isort: false
         mypy-ignore-dirs-files: 'C:\Users\drukk\OneDrive\Desktop\ECE 49595\boilermaker-buddy'
