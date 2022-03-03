@@ -80,7 +80,8 @@ for date in dates:
 data = [x for x in zip(*[iter(dates)])]
 # print(data)
 
-mydb = mysql.connector.connect(host="boilermakerbuddydb.c8jck5ubwnj5.us-east-1.rds.amazonaws.com", user="admin", password="ECE49595!", database="boilermakerbuddydb")
+mydb = mysql.connector.connect(host="boilermakerbuddydb.c8jck5ubwnj5.us-east-1.rds.amazonaws.com",\
+     user="admin", password="ECE49595!", database="boilermakerbuddydb")
 
 # print(mydb)
 
