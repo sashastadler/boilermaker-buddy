@@ -15,6 +15,7 @@ jobs:
         flake8-flags: ''
         mypy-flags: ''
         fail-on-isort: false
+        mypy-ignore-dirs-files: 'skill_env'
 
     - name: commit isort changes
       run: |
