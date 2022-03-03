@@ -41,33 +41,34 @@ for month in soup.find_all(class_='calendarTable'):
 
             if (i == 0):  # Day
                 # TODO fix hyphen dates/check to make sure all dates are there
-                if(len(content) == 1):
-                    content = '0' + content                
-                if(monthInd < 5 and len(content) == 2):
-                    dates.append('2021-' + months[monthInd] + '-' + content)  # TODO look into scraping year from website - might be in header?
+                if (len(content) == 1):
+                    content = '0' + content
+                if (monthInd < 5 and len(content) == 2):
+                    dates.append('2021-' + months[monthInd] + '-' + content)
                 elif(len(content) == 2):
                     dates.append('2022-' + months[monthInd] + '-' + content)
 
             elif (i == 1):  #Description (time & event)
-                # Extract Time #
+                # Extract Time  #
                 time = re.match('(\d*:*\d* [ap].m.)', content)
                 if time:
                     placeholder_variable = 0
                     # print(time.group(1))
                 else:
                     time = None
-                    # no time? what do store time as 0? or other placeholder that we understand to mean All-Day event
+                    # no time? what do store time as 0? or other placeholder
+                    # that we understand to mean All-Day event
                 # Extract Event Description #
                 '''
                 desc = re.match('([a-zA-Z0-9!@#\\$%\\^\\&*\\)\\(+=\/_\-, ]*$)', content)
                 if desc:
                     print(desc.group(1))
                 '''
-            elif (i == 2): # Weekday
+            elif (i == 2):  # Weekday
                 testlist.append(content)  # CHANGE - don't keep testlist
 
     monthInd += 1
-                    
+
 # print(dates)
 tempTuple = ()
 tempDates = []
@@ -79,7 +80,7 @@ data = [x for x in zip(*[iter(dates)])]
 # print(data)
 
 mydb = mysql.connector.connect(host="boilermakerbuddydb.c8jck5ubwnj5.us-east-1.rds.amazonaws.com",\
-     user="admin", password="ECE49595!", database="boilermakerbuddydb")
+    user="admin", password="ECE49595!", database="boilermakerbuddydb")
 
 # print(mydb)
 
@@ -88,7 +89,7 @@ mycursor = mydb.cursor()
 # sql = "INSERT INTO student_calendar (event_date) VALUES %r" %tuple(dates)
 
 datesql = "INSERT INTO student_calendar (event_date) VALUES (%s)"
-dowsql = "INSERT INTO student_calendar (event_dow) VALUES ('mon')" 
+dowsql = "INSERT INTO student_calendar (event_dow) VALUES ('mon')"
 mycursor.executemany(datesql, data)
 
 mydb.commit()
