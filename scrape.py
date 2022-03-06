@@ -2,13 +2,16 @@ from bs4 import BeautifulSoup
 import mysql.connector
 import requests
 import re
+from selenium import webdriver
+##
+# STUDENT CALENDAR
+##
 
 r = requests.get('https://www.purdue.edu/registrar/calendars/2021-22-Academic-Calendar.html')
 data = r.text
 soup = BeautifulSoup(data, 'html.parser')
 # Main content: div class="maincontent col-lg-9 col-md-9 col-sm-9 right"
 # month  <h4>
-
 # <table class "calendarTable"
 # day: 'day noGutterLeft col-lg-1 col-md-2 col-sm-2 col-xs-3'
 # day of the week: 'weekDay noGutterLeft col-lg-1 col-md-2 col-sm-2 col-xs-3'
@@ -22,7 +25,6 @@ dates = []
 times = []
 descriptions = []
 weekdays = []
-
 
 '''
 yearString = soup.find_all(class_="maincontent col-lg-9 col-md-9 col-sm-9 right").find_all("h1")\
@@ -41,7 +43,7 @@ for month in soup.find_all(class_='calendarTable'):
         for i in range(3):  # Finding day, description, weekday
             content = event.contents[(2*i)+1].get_text()
             if (i == 0):  # Day
-                # TODO fix hyphen dates/check to make sure all dates are there
+                # Extract Day #
                 if (len(content) == 1):
                     content = '0' + content
                 if (monthInd < 5 and len(content) == 2):
@@ -64,14 +66,45 @@ for month in soup.find_all(class_='calendarTable'):
                 else:
                     descriptions.append(None)
             elif (i == 2):  # Weekday
+                # Extract Weekday #
                 weekday = re.match('([A-Za-z])*(-([A-Za-z]*))*', content)
                 if weekday:
                     weekdays.append(weekday)
-                    print(weekday)
                 else:
                     weekdays.append(None)
-
     monthInd += 1
+
+##
+# STUDENT DINING
+##
+
+r = requests.get('https://dining.purdue.edu/menus/Earhart/2022/3/6/')
+data = r.text
+soup = BeautifulSoup(data, 'html.parser')
+print(soup.prettify())
+stations = {}
+
+# MENU #
+# <div class="meal">
+    # <div class="station"> -- for loop of stations
+        # <div class="station-container">
+            # <div class="station-items">
+                # <div class="station-item--container_fancy"> -- for loop of these
+                    # <a class="station-item " href="insert url ending here">
+                        # <div class="station-item-details">
+                            #<span class="station-item-text">Spicy Breaded Chicken Breast</span>
+
+# TODO include for loop of dining courts - testing with Earhart
+
+for station in soup.find_all(class_='station'):
+    print(station)
+    
+    '''
+    for foodOption in station: # .find_all("div"):# div[1].find_all("div"):
+        print(foodOption)
+    '''
+# HOURS #
+
 
 tempTuple = ()
 tempDates = []
