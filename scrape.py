@@ -3,6 +3,12 @@ import mysql.connector
 import requests
 import re
 from selenium import webdriver
+
+##
+# SELENIUM SETUP
+##
+driver = webdriver.Chrome(executable_path='C:\Webdrivers\chromedriver')
+
 ##
 # STUDENT CALENDAR
 ##
@@ -17,7 +23,6 @@ soup = BeautifulSoup(data, 'html.parser')
 # day of the week: 'weekDay noGutterLeft col-lg-1 col-md-2 col-sm-2 col-xs-3'
 # description: 'description col-lg-11 col-md-10 col-sm-10 col-xs-9'
 
-# REGEX SECTION #
 td = soup.find_all('h4')
 
 months = ['08', '09', '10', '11', '12', '01', '02', '03', '04', '05', '06', '07', '08']
@@ -78,10 +83,8 @@ for month in soup.find_all(class_='calendarTable'):
 # STUDENT DINING
 ##
 
-r = requests.get('https://dining.purdue.edu/menus/Earhart/2022/3/6/')
-data = r.text
-soup = BeautifulSoup(data, 'html.parser')
-print(soup.prettify())
+driver.get('https://dining.purdue.edu/menus/Earhart/2022/3/6/')
+
 stations = {}
 
 # MENU #
@@ -95,17 +98,20 @@ stations = {}
                             #<span class="station-item-text">Spicy Breaded Chicken Breast</span>
 
 # TODO include for loop of dining courts - testing with Earhart
-
-for station in soup.find_all(class_='station'):
+'''
+for station in driver.find_element_by_class_name('station'):
     print(station)
-    
-    '''
     for foodOption in station: # .find_all("div"):# div[1].find_all("div"):
         print(foodOption)
     '''
 # HOURS #
 
+# Close Webdriver #
+driver.close()
 
+##
+# SQL
+##
 tempTuple = ()
 tempDates = []
 
