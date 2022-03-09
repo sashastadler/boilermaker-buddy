@@ -3,6 +3,7 @@ import mysql.connector
 import requests
 import re
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 ##
 # SELENIUM SETUP
@@ -83,27 +84,30 @@ for month in soup.find_all(class_='calendarTable'):
 # STUDENT DINING
 ##
 
-driver.get('https://dining.purdue.edu/menus/Earhart/2022/3/6/')
+
 
 stations = {}
 
 # MENU #
-# <div class="meal">
-    # <div class="station"> -- for loop of stations
-        # <div class="station-container">
-            # <div class="station-items">
-                # <div class="station-item--container_fancy"> -- for loop of these
-                    # <a class="station-item " href="insert url ending here">
-                        # <div class="station-item-details">
-                            #<span class="station-item-text">Spicy Breaded Chicken Breast</span>
-
 # TODO include for loop of dining courts - testing with Earhart
-'''
-for station in driver.find_element_by_class_name('station'):
-    print(station)
-    for foodOption in station: # .find_all("div"):# div[1].find_all("div"):
-        print(foodOption)
-    '''
+
+
+driver.get('https://dining.purdue.edu/menus/')
+
+driver.find_elements(By.CLASS_NAME, "menus__home-content--link")
+
+driver.get('https://dining.purdue.edu/menus/Earhart/2022/3/6/')
+
+for station in driver.find_elements(By.CLASS_NAME, "station"):
+    stationName = station.find_element(By.CLASS_NAME, "station-name").text
+    for foodItem in station.find_elements(By.CLASS_NAME, "station-item-text"):
+        if stationName in stations:
+            stations[stationName].append(foodItem.text)
+        else:
+            stations[stationName] = [foodItem.text]
+
+print(stations)
+
 # HOURS #
 
 # Close Webdriver #
