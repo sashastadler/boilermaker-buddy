@@ -85,7 +85,7 @@ for month in soup.find_all(class_='calendarTable'):
 ##
 # STUDENT DINING
 ##
-courts = {}
+courts = {} # Dictionary of dictionaries - each sub dictionary details stations(key) and meals(values)
 courtURLs = []
 
 # MENU #
@@ -98,18 +98,25 @@ driver.get(baseDiningURL)
 # Get list of dining court URLs #
 # CURRENTLY: Scrapes for current data, need to do breakfast, lunch, dinner #
 # NEXT: Scrape for whole week #
+
+# Get dining court urls
 driverCourtURLs = driver.find_elements(By.CLASS_NAME, "menus__home-content--link")
 for driverCourtURL in driverCourtURLs:
     courtURLs.append(driverCourtURL.get_attribute('href')) 
 
-for courtURL in courtURLs:
+#  DINING LIST =[[0-Date, 1-Meal type, 2-Meal Time, 3-Court, 4-Station, 5-Food], [...]]
+
+# Get menu
+for courtURL in courtURLs: # Iterate through dining courts
     driver.get(courtURL)
     courtName = driver.find_element(By.XPATH, '//*[@id="app"]/div/header/div/div[1]/a/h1').text
     court = {}
-    for station in driver.find_elements(By.CLASS_NAME, "station"):
+    # TODO HERE iterate through dates
+    # TODO HERE iterate through meal times
+    for station in driver.find_elements(By.CLASS_NAME, "station"): # Iterate through stations in dining court
         stationName = station.find_element(By.CLASS_NAME, "station-name").text
-        for foodItem in station.find_elements(By.CLASS_NAME, "station-item-text"):
-            if stationName in court:
+        for foodItem in station.find_elements(By.CLASS_NAME, "station-item-text"): # Iterate through food items in station
+            if stationName in court: # just fill out DINING LIST at core, use current for loop var names
                 court[stationName].append(foodItem.text)
             else:
                 court[stationName] = [foodItem.text]
