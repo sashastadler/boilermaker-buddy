@@ -3,6 +3,8 @@ import mysql.connector
 import requests
 import re
 from selenium import webdriver
+from selenium.webdriver.support import ui
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 ##
@@ -83,30 +85,35 @@ for month in soup.find_all(class_='calendarTable'):
 ##
 # STUDENT DINING
 ##
-
-
-
-stations = {}
+courts = {}
+courtURLs = []
 
 # MENU #
 # TODO include for loop of dining courts - testing with Earhart
 
+baseDiningURL = 'https://dining.purdue.edu/menus/'
 
-driver.get('https://dining.purdue.edu/menus/')
+driver.get(baseDiningURL)
 
-driver.find_elements(By.CLASS_NAME, "menus__home-content--link")
+# Get list of dining court URLs #
+# CURRENTLY: Scrapes for current data, need to do breakfast, lunch, dinner #
+# NEXT: Scrape for whole week #
+driverCourtURLs = driver.find_elements(By.CLASS_NAME, "menus__home-content--link")
+for driverCourtURL in driverCourtURLs:
+    courtURLs.append(driverCourtURL.get_attribute('href')) 
 
-driver.get('https://dining.purdue.edu/menus/Earhart/2022/3/6/')
-
-for station in driver.find_elements(By.CLASS_NAME, "station"):
-    stationName = station.find_element(By.CLASS_NAME, "station-name").text
-    for foodItem in station.find_elements(By.CLASS_NAME, "station-item-text"):
-        if stationName in stations:
-            stations[stationName].append(foodItem.text)
-        else:
-            stations[stationName] = [foodItem.text]
-
-print(stations)
+for courtURL in courtURLs:
+    driver.get(courtURL)
+    courtName = driver.find_element(By.XPATH, '//*[@id="app"]/div/header/div/div[1]/a/h1').text
+    court = {}
+    for station in driver.find_elements(By.CLASS_NAME, "station"):
+        stationName = station.find_element(By.CLASS_NAME, "station-name").text
+        for foodItem in station.find_elements(By.CLASS_NAME, "station-item-text"):
+            if stationName in court:
+                court[stationName].append(foodItem.text)
+            else:
+                court[stationName] = [foodItem.text]
+    courts[courtName] = court
 
 # HOURS #
 
