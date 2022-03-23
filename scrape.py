@@ -10,7 +10,6 @@ from selenium.webdriver.common.by import By
 ##
 # SELENIUM SETUP
 ##
-
 driver = webdriver.Chrome(executable_path='C:\Webdrivers\chromedriver')
 
 ##
@@ -27,7 +26,6 @@ soup = BeautifulSoup(data, 'html.parser')
 # day of the week: 'weekDay noGutterLeft col-lg-1 col-md-2 col-sm-2 col-xs-3'
 # description: 'description col-lg-11 col-md-10 col-sm-10 col-xs-9'
 
-# REGEX SECTION #
 td = soup.find_all('h4')
 
 months = ['08', '09', '10', '11', '12', '01', '02', '03', '04', '05', '06', '07', '08']
@@ -35,7 +33,6 @@ dates = []
 times = []
 descriptions = []
 weekdays = []
-
 
 '''
 yearString = soup.find_all(class_="maincontent col-lg-9 col-md-9 col-sm-9 right").find_all("h1")\
@@ -54,7 +51,7 @@ for month in soup.find_all(class_='calendarTable'):
         for i in range(3):  # Finding day, description, weekday
             content = event.contents[(2*i)+1].get_text()
             if (i == 0):  # Day
-                # TODO fix hyphen dates/check to make sure all dates are there
+                # Extract Day #
                 if (len(content) == 1):
                     content = '0' + content
                 if (monthInd < 5 and len(content) == 2):
@@ -77,18 +74,17 @@ for month in soup.find_all(class_='calendarTable'):
                     descriptions.append(None)
 
             elif (i == 2):  # Weekday
+                # Extract Weekday #
                 weekday = re.match('([A-Za-z])*(-([A-Za-z]*))*', content)
                 if weekday:
                     weekdays.append(weekday.group(0))
                 else:
                     weekdays.append(None)
-
     monthInd += 1
 
 ##
 # STUDENT DINING
 ##
-
 courts = {} # Dictionary of dictionaries - each sub dictionary details stations(key) and meals(values)
 courtURLs = []
 diningList = []
