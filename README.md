@@ -129,3 +129,4 @@ A MySQL relational database named boilermakerBuddyDB is used with three tables, 
 ### Building Hour Information
 In progress…
 
+For information, inqueries, or any concerns, contact boilermakerbuddy@gmail.com.
