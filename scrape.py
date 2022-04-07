@@ -103,8 +103,6 @@ for driverCourtURL in driverCourtURLS:
 
 # Get menu
 for courtURL in courtURLs: # Iterate through dining courts
-    if courtURLs.index(courtURL) > 7:
-        break
     driver.get(courtURL)
     courtName = driver.find_element(By.XPATH, '//*[@id="app"]/div/header/div/div[1]/a/h1').text
     court = {}
@@ -115,17 +113,18 @@ for courtURL in courtURLs: # Iterate through dining courts
     for dateElement in dateElements:
         dateURLS.append(dateElement.get_attribute('href'))
 
+    mealURLS = []
     for dateURL in dateURLS: # Iterate through available dates
+        mealURLS = []
         driver.get(dateURL)
-        driver.find_element(By.CLASS_NAME, "mealpicker").click() # Activates dropdown menu of mealtimes
-        if driver.find_element(By.CLASS_NAME, "mealpicker-menu-meals"):
+        if courtURLs.index(courtURL) < 7: # If not ON-the-GO location
+            driver.find_element(By.CLASS_NAME, "mealpicker").click() # Activates dropdown menu of mealtimes
             mealElements = driver.find_element(By.CLASS_NAME, "mealpicker-menu-meals")
-            mealURLS = []
             for mealElement in mealElements.find_elements(By.TAG_NAME, "a"):
                 mealURLS.append(mealElement.get_attribute('href'))
-        else:
-            mealURLS.append(courtURL)
-
+        else: # If ON-the-GO location
+            mealURLS.append(dateURL) # iffy
+            
         for mealURL in mealURLS:
             driver.get(mealURL)
             if driver.find_element(By.CLASS_NAME, "mealpicker-meal-times").text != "Closed": # If dining court is serving that meal
@@ -135,11 +134,11 @@ for courtURL in courtURLs: # Iterate through dining courts
                     for foodItem in station.find_elements(By.CLASS_NAME, "station-item-text"): # Iterate through food items in station
                         # [0-Date, 1-Meal type, 2-Meal Time, 3-Court, 4-Station, 5-Food]
                         placeholder = True
-                        dateItem = driver.find_element(By.CLASS_NAME, "datepicker").text # Format: April 3rd, 2022
+                        dateItem = driver.find_element(By.CLASS_NAME, "datepicker").text.split("\n")[0] # Format: April 3rd, 2022
                         mealTypeItem = driver.find_element(By.CLASS_NAME, "mealpicker-meal-name").text
                         mealTimeItem = driver.find_element(By.CLASS_NAME, "mealpicker-meal-times").text # Format: 10am - 2pm
                         courtNameItem = driver.find_element(By.XPATH, '//*[@id="app"]/div/header/div/div[1]/a').text # Format: Earhart Dining Court
-                        stationNameItem = stationName
+                        stationNameItem = stationName.partition("\n")[0]
                         foodNameItem = foodItem.text
                         print([dateItem, mealTypeItem, mealTimeItem, courtNameItem, stationNameItem, foodNameItem])
                         diningMenu.append([dateItem, mealTypeItem, mealTimeItem, courtNameItem, stationNameItem, foodNameItem])
