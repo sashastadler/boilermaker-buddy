@@ -1,0 +1,19 @@
+-- Creating tables
+CREATE TABLE dining_courts(
+   meal_date DATE NOT NULL,
+   time_range VARCHAR(30) NOT NULL,
+   meal_type VARCHAR(30) NOT NULL,
+   court_name VARCHAR(30) NOT NULL,
+   station_name VARCHAR(30) NOT NULL,
+   food_name VARCHAR(50) NOT NULL,    
+);
+
+-- Getting attribute  information
+
+USE boilermakerbuddydb;
+
+EXPLAIN boilermakerbuddydb.student_calendar;
+DESCRIBE boilermakerbuddydb.student_calendar;
+SHOW FIELDS FROM boilermakerbuddydb.student_calendar;
+SHOW COLUMNS FROM boilermakerbuddydb.student_calendar;
+
