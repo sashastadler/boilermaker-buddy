@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 import selenium.webdriver.common.actions
 import insertData
 
-testing = False # TODO CHANGE TO FALSE - this is so i don't have to sit through dining info
+testing = True # TODO CHANGE TO FALSE - this is so i don't have to sit through dining info
 
 ##
 # SELENIUM SETUP
@@ -121,7 +121,7 @@ for driverCourtURL in driverCourtURLS:
 
 # Get menu
 for courtURL in courtURLs: # Iterate through dining courts
-    if testing == True: # TODO CHANGE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if testing == True: # TODO CHANGE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         break
     driver.get(courtURL)
     courtName = driver.find_element(By.XPATH, '//*[@id="app"]/div/header/div/div[1]/a/h1').text
@@ -178,13 +178,28 @@ insertData.insertDiningCourts(mydb, mycursor, diningMenu)
 
 # BUILDING ABBREVIATIONS #
 
+buildingInfo = []
+
 driver.get('https://www.purdue.edu/physicalfacilities/units/facilities-operations/building-deputies/directory.html')
 
 buildingTable = driver.find_element(By.XPATH, '/html/body/div[5]/div/div/div[1]/table/tbody')
 
 for row in buildingTable.find_elements(By.TAG_NAME, "tr"):
-    for column in row.find_elements(By.TAG_NAME, "th"):
-        print(column.text)
+    rowElements = row.find_elements(By.TAG_NAME, "td")
+    if len(rowElements) != 0: # Ensures something is in row - no errors
+        # Split for multiple abbreviations in one entry
+        if ',' in rowElements[0].text:
+            buildingNames = rowElements[0].text.split(',')
+            for name in buildingNames:
+                buildingEntry = [name.strip(), rowElements[2].text]
+                buildingInfo.append(buildingEntry)
+        else: 
+            buildingEntry = [rowElements[0].text, rowElements[2].text]
+            buildingInfo.append(buildingEntry)
+
+#Format data                        
+buildingInfo = [tuple(x) for x in buildingInfo]
+        
 
 
 
