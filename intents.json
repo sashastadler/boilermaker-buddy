@@ -275,30 +275,48 @@
                     "values": [
                         {
                             "name": {
-                                "value": "Windsor"
+                                "value": "Windsor",
+                                "synonyms": [
+                                    "Windsor Dining Hall",
+                                    "Windsor Dining Court"
+                                ]
                             }
                         },
                         {
                             "name": {
                                 "value": "Hillenbrand",
                                 "synonyms": [
+                                    "Hillenbrand Dining Hall",
+                                    "Hillenbrand  Dining Court",
                                     "hilly"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "Ford"
+                                "value": "Ford",
+                                "synonyms": [
+                                    "Ford Dining Hall",
+                                    "Ford  Dining Court"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "Earhart"
+                                "value": "Earhart",
+                                "synonyms": [
+                                    "Earhart  Dining Hall",
+                                    "Earhart  Dining Court"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "Wiley"
+                                "value": "Wiley",
+                                "synonyms": [
+                                    "Wiley Dining Hall",
+                                    "Wiley  Dining Court"
+                                ]
                             }
                         }
                     ]
