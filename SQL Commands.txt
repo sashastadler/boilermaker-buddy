@@ -1,4 +1,13 @@
+-----------------------------------
 -- Creating tables
+-----------------------------------
+
+--student_calendar table
+
+-- I forgot how I created the student_calendar table
+
+--dining_courts table
+
 CREATE TABLE dining_courts(
    meal_date DATE NOT NULL,
    time_range VARCHAR(30) NOT NULL,
@@ -8,7 +17,18 @@ CREATE TABLE dining_courts(
    food_name VARCHAR(50) NOT NULL,    
 );
 
--- Getting attribute  information
+--building_abbreviations table
+
+CREATE TABLE building_abbreviations(
+   building_abbreviation VARCHAR(15) NOT NULL,
+   building_name VARCHAR(75) NOT NULL
+);
+
+-----------------------------------
+-- Getting attribute information
+-----------------------------------
+
+--student_calendar table
 
 USE boilermakerbuddydb;
 
@@ -17,3 +37,27 @@ DESCRIBE boilermakerbuddydb.student_calendar;
 SHOW FIELDS FROM boilermakerbuddydb.student_calendar;
 SHOW COLUMNS FROM boilermakerbuddydb.student_calendar;
 
+--dining_courts table
+
+USE boilermakerbuddydb;
+
+EXPLAIN boilermakerbuddydb.dining_courts;
+DESCRIBE boilermakerbuddydb.dining_courts;
+SHOW FIELDS FROM boilermakerbuddydb.dining_courts;
+SHOW COLUMNS FROM boilermakerbuddydb.dining_courts;
+
+-----------------------------------
+-- Getting table content
+-----------------------------------
+
+--student_calendar table
+
+USE boilermakerbuddydb;
+
+SELECT * FROM student_calendar;
+
+--dining_courts table
+
+USE boilermakerbuddydb;
+
+SELECT * FROM dining_courts;
