@@ -1,0 +1,385 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "boilermaker buddy",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "HelloWorldIntent",
+                    "slots": [],
+                    "samples": [
+                        "hello",
+                        "how are you",
+                        "say hi world",
+                        "say hi",
+                        "hi",
+                        "say hello world",
+                        "say hello"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AcademicCalendarIntent",
+                    "slots": [
+                        {
+                            "name": "calevent",
+                            "type": "AMAZON.EventType"
+                        }
+                    ],
+                    "samples": [
+                        "tell when {calevent} is",
+                        "tell me when {calevent} came",
+                        "show when {calevent} is",
+                        "get when {calevent} is",
+                        "give when {calevent} is",
+                        "when does the {calevent}",
+                        "when did {calevent}",
+                        "can you tell us when {calevent} is",
+                        "get me when {calevent}",
+                        "show us when {calevent} is",
+                        "give us when {calevent} is",
+                        "when's {calevent} ",
+                        "tell me when {calevent}",
+                        "tell me when {calevent} is",
+                        "when are {calevent}",
+                        "when is {calevent}"
+                    ]
+                },
+                {
+                    "name": "DiningMenuIntent",
+                    "slots": [
+                        {
+                            "name": "mealtime",
+                            "type": "mealtime"
+                        },
+                        {
+                            "name": "purdueLocation",
+                            "type": "diningCourts"
+                        }
+                    ],
+                    "samples": [
+                        "what's for {mealtime} at {purdueLocation}"
+                    ]
+                },
+                {
+                    "name": "DiningTimeIntent",
+                    "slots": [
+                        {
+                            "name": "diningCourt",
+                            "type": "diningCourts"
+                        },
+                        {
+                            "name": "mealtime",
+                            "type": "mealtime"
+                        },
+                        {
+                            "name": "startEnd",
+                            "type": "startEnd"
+                        }
+                    ],
+                    "samples": [
+                        "when is the {startEnd} of {mealtime}",
+                        "when does {mealtime} {startEnd}",
+                        "when does {diningCourt} {startEnd} serving food",
+                        "when does {diningCourt} {startEnd} serving food at {mealtime}",
+                        "when is the {startEnd} of {mealtime} at {diningCourt}",
+                        "when does {mealtime} {startEnd} at {diningCourt}",
+                        "when does {diningCourt} {startEnd} {mealtime}"
+                    ]
+                },
+                {
+                    "name": "SingIntent",
+                    "slots": [],
+                    "samples": [
+                        "sing the purdue song",
+                        "hail to old purdue",
+                        "hail to purdue",
+                        "sing hail hail to old purdue",
+                        "sing a song",
+                        "sing hail to old purdue"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "AMAZON.EventType",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "SPRING SEMESTER CLASSES BEGIN",
+                                "synonyms": [
+                                    "spring semester"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MARTIN LUTHER KING JR. DAY",
+                                "synonyms": [
+                                    "MLK Day"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "commencement"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "semester ends",
+                                "synonyms": [
+                                    "semester's over"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "final exams",
+                                "synonyms": [
+                                    "exams",
+                                    "exam week",
+                                    "finals",
+                                    "finals week"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "classes end",
+                                "synonyms": [
+                                    "classes over",
+                                    "spring classes end",
+                                    "fall classes end"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schedule of Classes published for Summer 2022 Term",
+                                "synonyms": [
+                                    "summer class schedule released",
+                                    "summer classes released",
+                                    "summer class schedule"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "THANKSGIVING VACATION",
+                                "synonyms": [
+                                    "november break",
+                                    "thanksgiving break",
+                                    "thanksgiving"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Last Day To Add/Modify a Course With Instructor, Advisor, and Department Head Signatures"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Last Day To Withdraw From a Course With a W or WF Grade",
+                                "synonyms": [
+                                    "last day to drop a class with a w",
+                                    "last day to drop a class"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Second Eight-Week Courses Begin"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schedule of Classes published for Spring 2022 Term",
+                                "synonyms": [
+                                    "spring class schedule"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "october break",
+                                "synonyms": [
+                                    "fall break"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Last Day For Grade Correction for Spring Semester 2020-21 and 2021 Summer Session"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Last Day to Withdraw a Course With a Grade of W or to Add/Modify a Course With Instructor and Advisor Signature"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Last Day to Cancel a Course Assignment Without It Appearing On Record"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "labor day (no classes)",
+                                "synonyms": [
+                                    "labor day"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "last day to register without a late fee"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "fall semester classes begin"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "spring break",
+                                "synonyms": [
+                                    "spring vacation"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "diningCourts",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Windsor"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Hillenbrand",
+                                "synonyms": [
+                                    "hilly"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ford"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Earhart"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Wiley"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "mealtime",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "brunch",
+                                "synonyms": [
+                                    "early lunch",
+                                    "late breakfast"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "late lunch",
+                                "synonyms": [
+                                    "afternoon tea",
+                                    "linner"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "breakfast",
+                                "synonyms": [
+                                    "toast",
+                                    "breakfasts"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "lunch",
+                                "synonyms": [
+                                    "lunches",
+                                    "luncheon"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dinner",
+                                "synonyms": [
+                                    "dining",
+                                    "evening meal",
+                                    "dinners",
+                                    "suppers",
+                                    "supper"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "startEnd",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "stop",
+                                "synonyms": [
+                                    "conclude",
+                                    "end"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "start",
+                                "synonyms": [
+                                    "commence",
+                                    "begin"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
