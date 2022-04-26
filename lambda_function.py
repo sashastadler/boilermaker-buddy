@@ -5,6 +5,7 @@
 # session persistence, api calls, and more.
 # This sample is built using the handler classes approach in skill builder.
 import logging
+import query_database
 from pickle import TRUE
 import ask_sdk_core.utils as ask_utils
 
@@ -79,8 +80,10 @@ class AcademicCalendarIntentHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
 
         acCalEvent = handler_input.request_envelope.request.intent.slots["calevent"].value
+        #get date from database, return date
+        dateString = query_database.queryDate(acCalEvent)
         if acCalEvent != None:
-            speak_output = "You said " + str(acCalEvent) + " ."
+            speak_output = acCalEvent + " is on " + dateString + "."
             return (
                 handler_input.response_builder
                 .speak(speak_output)
@@ -102,13 +105,14 @@ class DiningMenuIntentHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
 
-        #mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
         mealname = None
         mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
         
         diningCourt = None
         diningCourt = handler_input.request_envelope.request.intent.slots["diningCourt"].value
         
+        #return list of foods at mealtime at diningcourt
+
         if mealname != None and diningCourt != None:
             speak_output = "You said " + str(mealname) + " ."
             return (
