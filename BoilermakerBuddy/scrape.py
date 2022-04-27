@@ -12,7 +12,7 @@ testing = False # TODO CHANGE TO FALSE - this is so i don't have to sit through 
 ##
 # SELENIUM SETUP
 ##
-driver = webdriver.Chrome('./chromedriver')
+driver = webdriver.Chrome('BoilermakerBuddy/chromedriver')
 
 ##
 # CONNECT TO DATABASE
@@ -198,12 +198,10 @@ for row in buildingTable.find_elements(By.TAG_NAME, "tr"):
             buildingInfo.append(buildingEntry)
 
 #Format data                        
-buildingInfo = [tuple(x) for x in buildingInfo]
-        
+buildingInfo = [tuple(x) for x in buildingInfo]   
 
-
-
-
+#Insert into dining_courts table
+insertData.insertBuildingAbbreviations(mydb, mycursor, buildingInfo)
 
 # Close Webdriver #
 driver.close()

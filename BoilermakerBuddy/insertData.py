@@ -69,6 +69,29 @@ def insertDiningCourts(mydb, mycursor, diningMenu):
         print("Failed to insert into MySQL table {}".format(error))
 
 ##
+# Inserting into building_abbreviations table
+##
+def insertBuildingAbbreviations(mydb, mycursor, buildingInfo):
+
+    try:
+        # Clear tables
+        clearBuildingSQL = "TRUNCATE TABLE building_abbreviations"
+        mycursor.execute(clearBuildingSQL)
+        print("All records cleared in building_abbreviations table")
+
+        # Insert data into tables
+        buildingAbbreviationsSQL = "INSERT INTO building_abbreviations (building_abbreviation, building_name) VALUES (%s, %s)"
+
+        mycursor.executemany(buildingAbbreviationsSQL, buildingInfo)
+
+        mydb.commit()
+
+        print(mycursor.rowcount, "records inserted in building_abbreviations table.")
+
+    except mysql.connector.Error as error:
+        print("Failed to insert into MySQL table {}".format(error))
+
+##
 # Disconnecting from database
 ##
 def disconnect(mydb, mycursor):
