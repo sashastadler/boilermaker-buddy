@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 import selenium.webdriver.common.actions
 import insertData
 
-testing = True # TODO CHANGE TO FALSE - this is so i don't have to sit through dining info
+testing = False # TODO CHANGE TO FALSE - this is so i don't have to sit through dining info
 
 ##
 # SELENIUM SETUP
