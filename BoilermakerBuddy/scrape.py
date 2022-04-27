@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 import selenium.webdriver.common.actions
 import insertData
 
-testing = False # TODO CHANGE TO FALSE - this is so i don't have to sit through dining info
+testing = False # For testing - disables dining scraping
 
 ##
 # SELENIUM SETUP
@@ -26,12 +26,6 @@ mydb, mycursor = insertData.connect()
 r = requests.get('https://www.purdue.edu/registrar/calendars/2021-22-Academic-Calendar.html')
 data = r.text
 soup = BeautifulSoup(data, 'html.parser')
-# Main content: div class="maincontent col-lg-9 col-md-9 col-sm-9 right"
-# month  <h4>
-# <table class "calendarTable"
-# day: 'day noGutterLeft col-lg-1 col-md-2 col-sm-2 col-xs-3'
-# day of the week: 'weekDay noGutterLeft col-lg-1 col-md-2 col-sm-2 col-xs-3'
-# description: 'description col-lg-11 col-md-10 col-sm-10 col-xs-9'
 
 td = soup.find_all('h4')
 
@@ -41,16 +35,6 @@ dates = []
 times = []
 descriptions = []
 weekdays = []
-
-'''
-yearString = soup.find_all(class_="maincontent col-lg-9 col-md-9 col-sm-9 right").find_all("h1")\
-    .contents[0].get_text()
-yearHyphenYear = re.match('([0-9]*)-([0-9]*)', yearString)
-beginYear = yearHyphenYear.group(1)
-print("BEGIN YEAR: " + beginYear)
-endYear = yearHyphenYear.group(2)
-print("END YEAR: " + beginYear)
-'''
 
 monthInd = 0
 for month in soup.find_all(class_='calendarTable'):
@@ -121,7 +105,7 @@ for driverCourtURL in driverCourtURLS:
 
 # Get menu
 for courtURL in courtURLs: # Iterate through dining courts
-    if testing == True: # TODO CHANGE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if testing == True: 
         break
     driver.get(courtURL)
     courtName = driver.find_element(By.XPATH, '//*[@id="app"]/div/header/div/div[1]/a/h1').text
