@@ -3,14 +3,23 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
+REQUIRES = [ 
+    "calendar",
+    "bs4",
+    "requests",
+    "re",
+    "selenium"]
+
 setuptools.setup(
-    name="rphaneuf",
+    name="BoilermakerBuddy",
     version="0.0.1",
     author="Roger Phaneuf",
     author_email="boilermakerbuddy@gmail.com",
     description="( ͡° ͜ʖ ͡°)",
     long_description=long_description,
     long_description_content_type="text/markdown",
+    install_requires=REQUIRES,
+    include_package_data=True,
     url="https://github.com/sashastadler/boilermaker-buddy.git",
     project_urls={},
     classifiers=[
@@ -18,7 +27,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "src"},
+    package_dir={"": "boilermaker-buddy"},
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.6",
 )
