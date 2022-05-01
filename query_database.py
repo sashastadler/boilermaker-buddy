@@ -66,7 +66,13 @@ def selectDateGivenDescription(mycursor, event_description):
         if(DEBUG > 0):
             print(studentCalendarData)
             print(studentCalendarData[0][0])
-        dateString = dateToString(str(studentCalendarData[0][0]))
+            print(len(studentCalendarData))
+        dateString = ""
+        for a in range(len(studentCalendarData)): #if an event has multiple dates
+            if(a > 0):
+                dateString = dateString + " and "
+            dateS = dateToString(str(studentCalendarData[a][0]))
+            dateString = dateString + dateS
         return dateString
 
     except mysql.connector.Error as error:
