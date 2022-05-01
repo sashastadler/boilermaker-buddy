@@ -55,6 +55,7 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
                 # .ask("add a reprompt if you want to keep the session open for the user to respond")
                 .response
         )
+
 def getValueFromSlot(slotObj):
     n = slotObj.value
     return n
@@ -67,8 +68,6 @@ class AcademicCalendarIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        acCalEvent = handler_input.request_envelope.request.intent.slots["calevent"].value ##returns what was spoken, not the resolved value
-        
         slotObj = handler_input.request_envelope.request.intent.slots["calevent"]
         acCalEventValue = getValueFromSlot(slotObj)
         acCalEvent = entity_resolution.resolveEvent(acCalEventValue) # resolve to the "official" name for the event
@@ -101,14 +100,15 @@ class DiningMenuIntentHandler(AbstractRequestHandler):
 
         mealname = None
         mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
-        
+        mealname = entity_resolution.resolveMealtime(mealname)
+
         diningCourt = None
         diningCourt = handler_input.request_envelope.request.intent.slots["diningCourt"].value
-        
+        diningCourt = entity_resolution.resolveCourt(diningCourt)
         #return list of foods at mealtime at diningcourt
 
         if mealname != None and diningCourt != None:
-            speak_output = "You said " + str(mealname) + " ."
+            speak_output = "You said " + str(mealname) + " at " + str(diningCourt) + " ."
             return (
                 handler_input.response_builder
                 .speak(speak_output)
@@ -133,10 +133,12 @@ class DiningTimeIntentHandler(AbstractRequestHandler):
         #mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
         mealname = None
         mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
+        mealname = entity_resolution.resolveMealtime(mealname)
         
         diningCourt = None
         diningCourt = handler_input.request_envelope.request.intent.slots["diningCourt"].value
-        
+        diningCourt = entity_resolution.resolveCourt(diningCourt)
+
         start = False
         if handler_input.request_envelope.request.intent.slots["diningCourt"].value == "start":
             start = True # user asked for start time
