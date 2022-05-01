@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import insertData
 
-testing = True # For testing - disables dining scraping
+testing = False # For testing - disables dining scraping
 
 ##
 # SELENIUM SETUP
