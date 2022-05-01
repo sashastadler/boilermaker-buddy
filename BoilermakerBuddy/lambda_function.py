@@ -59,15 +59,15 @@ def lambda_handler(event, context):
 
                 elif (i == 1):  #Description (time & event)
                     # Extract Time #
-                    time = re.match('(\d*:*\d* [ap].m.)', content)
+                    time = re.match('\n*(\d*:*\d* [ap].m.)', content)
                     if time:
                         times.append(time.group(0))
                     else:
                         times.append(None)
                     # Extract Event Description #
-                    desc = re.match('(\d*:*\d* [ap].m.)*([a-zA-Z0-9!@#\\$%\\^\\&*\\)\\(+=\/_\-, ]*)(\n)*', content)
+                    desc = re.match('\n*(\d*:*\d* [ap].m.)*([a-zA-Z0-9!@#\\$%\\^\\&*\\)\\(+=\/_\-, ]*)(\n)*', content)
                     if desc:
-                        descriptions.append(content.lstrip())
+                        descriptions.append(desc.group(2).lstrip())
                     else:
                         descriptions.append(None)
 
