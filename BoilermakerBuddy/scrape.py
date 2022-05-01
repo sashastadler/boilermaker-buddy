@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import insertData
 
-testing = False # For testing - disables dining scraping
+testing = True # For testing - disables dining scraping
 
 ##
 # SELENIUM SETUP
@@ -35,6 +35,7 @@ times = []
 descriptions = []
 weekdays = []
 
+dateRange = False  #If there is a range of dates for an entry
 monthInd = 0
 for month in soup.find_all(class_='calendarTable'):
     currMonth = months[monthInd]  # Month the for loop is on
@@ -47,8 +48,13 @@ for month in soup.find_all(class_='calendarTable'):
                     content = '0' + content
                 if (monthInd < 5 and len(content) == 2):
                     dates.append('2021-' + months[monthInd] + '-' + content)
-                else: #if(len(content) == 2):
+                elif(len(content) == 2):
                     dates.append('2022-' + months[monthInd] + '-' + content)
+                else:
+                    datesMatch = re.match('(\d+)-(\d+)', content)
+                    dates.append('2022-' + months[monthInd] + '-' + datesMatch.group(1))
+                    dates.append('2022-' + months[monthInd] + '-' + datesMatch.group(2))
+                    dateRange = True
 
             elif (i == 1):  #Description (time & event)
                 # Extract Time #
@@ -60,7 +66,7 @@ for month in soup.find_all(class_='calendarTable'):
                 # Extract Event Description #
                 desc = re.match('(\d*:*\d* [ap].m.)*([a-zA-Z0-9!@#\\$%\\^\\&*\\)\\(+=\/_\-, ]*)(\n)*', content)
                 if desc:
-                    descriptions.append(desc.group(2).lstrip())
+                    descriptions.append(content.lstrip())
                 else:
                     descriptions.append(None)
 
@@ -71,6 +77,11 @@ for month in soup.find_all(class_='calendarTable'):
                     weekdays.append(weekday.group(0))
                 else:
                     weekdays.append(None)
+                if dateRange:
+                    times.append(times[-1])
+                    descriptions.append(descriptions[-1])
+                    weekdays.append(weekdays[-1])
+                    dateRange = False
     monthInd += 1
 
 # Insert Student Calendar data into database #
