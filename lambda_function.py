@@ -4,8 +4,10 @@
 # Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
 # session persistence, api calls, and more.
 # This sample is built using the handler classes approach in skill builder.
+from importlib.metadata import entry_points
 import logging
 import query_database
+import entity_resolution
 from pickle import TRUE
 import ask_sdk_core.utils as ask_utils
 
@@ -28,7 +30,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "Boilermaker Buddy is open"
+        speak_output = "Welcome to Boilermaker Buddy!"
         return (
             handler_input.response_builder
                 .speak(speak_output)
@@ -45,7 +47,7 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "this works!"
+        speak_output = "Hello!"
 
         return (
             handler_input.response_builder
@@ -53,23 +55,7 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
                 # .ask("add a reprompt if you want to keep the session open for the user to respond")
                 .response
         )
-'''
-class SingIntentHandler(AbstractRequestHandler):
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return ask_utils.is_intent_name("SingIntent")(handler_input)
-        
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        songP = "Hail, hail to old Purdue! All hail to our old gold and black! Hail, hail to old Purdue! Our friendship may she never lack. "
-        return (
-            handler_input.response_builder
-            .speak(songP)
-            # .ask("add a reprompt if you want to keep the session open for the user to respond")
-            .response
-            )
-'''
-def getResolutionNameFromSlot(slotObj):
+def getValueFromSlot(slotObj):
     n = slotObj.value
     return n
 
@@ -84,13 +70,14 @@ class AcademicCalendarIntentHandler(AbstractRequestHandler):
         acCalEvent = handler_input.request_envelope.request.intent.slots["calevent"].value ##returns what was spoken, not the resolved value
         
         slotObj = handler_input.request_envelope.request.intent.slots["calevent"]
-        acCalEvent = getResolutionNameFromSlot(slotObj)
+        acCalEventValue = getValueFromSlot(slotObj)
+        acCalEvent = entity_resolution.resolveEvent(acCalEventValue) # resolve to the "official" name for the event
         
         #get date from database, return date as speakable string
-        # dateString = query_database.queryDate(acCalEvent)
+        dateString = query_database.queryDate(acCalEvent)
         if acCalEvent != None:
-            # speak_output = acCalEvent + " is on " + dateString + "."
-            speak_output = "You said " + acCalEvent
+            speak_output = dateString + "."
+            # speak_output = "You said " + acCalEvent
             return (
                 handler_input.response_builder
                 .speak(speak_output)
@@ -180,7 +167,7 @@ class HelpIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "You can say hello to me! How can I help?"
+        speak_output = "You can ask about anything from the student calendar, about today's meals, and building information. What would you like to know?"
 
         return (
             handler_input.response_builder
