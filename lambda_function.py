@@ -29,7 +29,6 @@ class LaunchRequestHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         speak_output = "Boilermaker Buddy is open"
-
         return (
             handler_input.response_builder
                 .speak(speak_output)
@@ -70,6 +69,10 @@ class SingIntentHandler(AbstractRequestHandler):
             .response
             )
 '''
+def getResolutionNameFromSlot(slotObj):
+    n = slotObj.value
+    return n
+
 class AcademicCalendarIntentHandler(AbstractRequestHandler):
     #Handler for Academic Calendar Intent
     def can_handle(self, handler_input):
@@ -78,12 +81,16 @@ class AcademicCalendarIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-
-        acCalEvent = handler_input.request_envelope.request.intent.slots["calevent"].value
-        #get date from database, return date
-        dateString = query_database.queryDate(acCalEvent)
+        acCalEvent = handler_input.request_envelope.request.intent.slots["calevent"].value ##returns what was spoken, not the resolved value
+        
+        slotObj = handler_input.request_envelope.request.intent.slots["calevent"]
+        acCalEvent = getResolutionNameFromSlot(slotObj)
+        
+        #get date from database, return date as speakable string
+        # dateString = query_database.queryDate(acCalEvent)
         if acCalEvent != None:
-            speak_output = acCalEvent + " is on " + dateString + "."
+            # speak_output = acCalEvent + " is on " + dateString + "."
+            speak_output = "You said " + acCalEvent
             return (
                 handler_input.response_builder
                 .speak(speak_output)
