@@ -45,6 +45,8 @@
                         }
                     ],
                     "samples": [
+                        "when is the {calevent}",
+                        "when do {calevent}",
                         "tell when {calevent} is",
                         "tell me when {calevent} came",
                         "show when {calevent} is",
@@ -126,49 +128,75 @@
                             "name": {
                                 "value": "SPRING SEMESTER CLASSES BEGIN",
                                 "synonyms": [
-                                    "spring semester"
+                                    "spring semester classes start",
+                                    "spring semester classes begin",
+                                    "spring classes start",
+                                    "spring classes begin"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "MARTIN LUTHER KING JR. DAY",
+                                "value": "SPRING VACATION",
                                 "synonyms": [
-                                    "MLK Day"
+                                    "march vacation",
+                                    "march break",
+                                    "spring holiday",
+                                    "spring vacation",
+                                    "spring break"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "commencement"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "semester ends",
+                                "value": "GRADES DUE",
                                 "synonyms": [
-                                    "semester's over"
+                                    "grades need to be submitted by",
+                                    "grades need to be submitted",
+                                    "grades due"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "final exams",
+                                "value": "Deadline For Pending Fall 2020 Incomplete Grades to Become Failing Grades",
                                 "synonyms": [
-                                    "exams",
+                                    "incomplete grades become failing grades"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SEMESTER ENDS",
+                                "synonyms": [
+                                    "done with the semester",
+                                    "end of the semester",
+                                    "semester end",
+                                    "semester ends",
+                                    "semester over"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FINAL EXAMS",
+                                "synonyms": [
+                                    "week of finals",
                                     "exam week",
                                     "finals",
-                                    "finals week"
+                                    "finals begin",
+                                    "finals week",
+                                    "final exams"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "classes end",
+                                "value": "CLASSES END",
                                 "synonyms": [
                                     "classes over",
-                                    "spring classes end",
-                                    "fall classes end"
+                                    "end of classes",
+                                    "classes end"
                                 ]
                             }
                         },
@@ -176,9 +204,15 @@
                             "name": {
                                 "value": "Schedule of Classes published for Summer 2022 Term",
                                 "synonyms": [
-                                    "summer class schedule released",
-                                    "summer classes released",
-                                    "summer class schedule"
+                                    "classes for summer published",
+                                    "summer class schedule published",
+                                    "summer schedule of classes gets released",
+                                    "summer schedule of classes get released",
+                                    "summer schedule of classes comes out",
+                                    "summer schedule of classes comes out",
+                                    "summer schedule of classes published",
+                                    "summer class schedule come out",
+                                    "summer class schedule comes out"
                                 ]
                             }
                         },
@@ -186,6 +220,8 @@
                             "name": {
                                 "value": "THANKSGIVING VACATION",
                                 "synonyms": [
+                                    "thanksgiving vacation",
+                                    "november vacation",
                                     "november break",
                                     "thanksgiving break",
                                     "thanksgiving"
@@ -194,77 +230,90 @@
                         },
                         {
                             "name": {
-                                "value": "Last Day To Add/Modify a Course With Instructor, Advisor, and Department Head Signatures"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Last Day To Withdraw From a Course With a W or WF Grade",
-                                "synonyms": [
-                                    "last day to drop a class with a w",
-                                    "last day to drop a class"
-                                ]
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Second Eight-Week Courses Begin"
-                            }
-                        },
-                        {
-                            "name": {
                                 "value": "Schedule of Classes published for Spring 2022 Term",
                                 "synonyms": [
-                                    "spring class schedule"
+                                    "spring class schedule published",
+                                    "spring schedule of classes gets released",
+                                    "spring schedule of classes get released",
+                                    "spring schedule of classes comes out",
+                                    "spring schedule of classes comes out",
+                                    "spring schedule of classes published",
+                                    "spring class schedule come out",
+                                    "spring class schedule comes out"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "october break",
+                                "value": "OCTOBER BREAK",
                                 "synonyms": [
+                                    "october vacation",
+                                    "autumn break",
+                                    "october break",
                                     "fall break"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "Last Day For Grade Correction for Spring Semester 2020-21 and 2021 Summer Session"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Last Day to Withdraw a Course With a Grade of W or to Add/Modify a Course With Instructor and Advisor Signature"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Last Day to Cancel a Course Assignment Without It Appearing On Record"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "labor day (no classes)",
+                                "value": "Last Day For Grade Correction for Spring Semester 2020-21 and 2021 Summer Session",
                                 "synonyms": [
+                                    "last day for summer semester grade correction",
+                                    "last day for spring semester grade correction",
+                                    "last day for summer grade correction",
+                                    "last day for spring grade correction"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Last Day to Withdraw a Course With a Grade of W or to Add/Modify a Course With Instructor and Advisor Signature",
+                                "synonyms": [
+                                    "last day to witdraw from a course",
+                                    "last day to withdraw from a class with a w",
+                                    "last day to withdraw from a class"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LABOR DAY (No Classes)",
+                                "synonyms": [
+                                    "september break",
+                                    "labor day no classes",
                                     "labor day"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "last day to register without a late fee"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "fall semester classes begin"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "spring break",
+                                "value": "Last Day to Cancel a Course Assignment Without It Appearing On Record",
                                 "synonyms": [
-                                    "spring vacation"
+                                    "last day to withdraw from a course without it being on my recor",
+                                    "last day to withdraw from a class without it being on my record",
+                                    "last day to cancel a class without it being on my record",
+                                    "last day to cancel a class"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Last Day to Register Without a Late Fee",
+                                "synonyms": [
+                                    "last day to register without a late fee",
+                                    "last day to register without a fee",
+                                    "last day to register"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FALL SEMESTER CLASSES BEGIN",
+                                "synonyms": [
+                                    "fall semester classes start",
+                                    "fall semester classes begin",
+                                    "fall classes start",
+                                    "fall classes begin"
                                 ]
                             }
                         }
