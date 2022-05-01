@@ -6,7 +6,7 @@ from datetime import datetime
 ##
 # SQL Stuff!
 ##
-
+DEBUG = 0
 ##
 # Connecting to database
 ##
@@ -46,7 +46,7 @@ def selectStudentCalendar(mycursor):
 #convert (datetime.date(YYYY, MM, DD) to string "Month Day Year"
 def dateToString(date):
     d = date.split("-")
-    date = datetime(d[0], d[1], d[2], 0, 0, 0, 0)
+    date = datetime(int(d[0]), int(d[1]), int(d[2]), 0, 0, 0, 0)
     format = '%A, %B %d, %Y' # Dayofweek, Month day, Year (ex: Monday, January 1st, 2055)
 
     return date.strftime(format)
@@ -63,8 +63,9 @@ def selectDateGivenDescription(mycursor, event_description):
         mycursor.execute(studentCalendarSQL)
 
         studentCalendarData = mycursor.fetchall()
-
-        print(studentCalendarData[0][0])
+        if(DEBUG > 0):
+            print(studentCalendarData)
+            print(studentCalendarData[0][0])
         dateString = dateToString(str(studentCalendarData[0][0]))
         return dateString
 
@@ -89,9 +90,7 @@ def queryDate(event):
     return date
 
 if __name__ == "__main__":
-
     mydb, mycursor = connect()
-
-    date = selectDateGivenDescription(mycursor, "LABOR DAY (No Classes)")
+    date = selectDateGivenDescription(mycursor, "CLASSES END")
     print(date)
     disconnect(mydb, mycursor)
