@@ -45,7 +45,13 @@ The elements of dining_list are then uploaded into our SQL database at the end o
 
 ### Building Information
 
-Building information web scraping is currently in progress.  No information is available about this section.
+The building information is scraped using Selenium with the Chromium webdriver.
+
+We use Selenium to access the table of building abbreviation and building names on the following page: https://www.purdue.edu/physicalfacilities/units/facilities-operations/building-deputies/directory.html
+
+The code then iterates through the entire table, obtaining the building abbreviation and the building name.  If the building abbreviation for a row in the table is split with a comma, it makes a separate entry for each element.  The date is stored in a list of lists called buildingInfo, where each sublist is formatted as such, [Building Abbreviation, Building Name].
+
+The elements of buildingInfo are then uploaded into our SQL database.
 
 ## AWS Lambda
 
