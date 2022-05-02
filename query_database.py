@@ -1,6 +1,5 @@
 from email.utils import formatdate
 import mysql.connector
-import re
 from datetime import datetime
 
 ##
@@ -75,11 +74,20 @@ def selectDateGivenDescription(mycursor, event_description):
                 dateString = dateString + " to "
             elif(a > 0) and not(" to " in dateString):
                 dateString = dateString + " and "
-            elif(a > 0) and "to" in dateString:
-                if a % 2 == 0:
-                    dateString = dateString + " and "
+            # elif(a > 0) and "to" in dateString:
+            #     if a % 2 == 0:
+            #         dateString = dateString + " and "
             dateS = dateToString(str(studentCalendarData[a][0]))
             dateString = dateString + dateS
+        if("December 13" in dateString):
+            d = dateString.split(" and ", 1)
+            dateString = " to ".join(d)
+            d = dateString.split(" and ")
+            spring = " to ".join(d[1:])
+            fullDate = []
+            fullDate.append(d[0])
+            fullDate.append(spring)
+            dateString = " and ".join(fullDate)
         return dateString
 
     except mysql.connector.Error as error:
@@ -137,6 +145,6 @@ def queryMenu(diningcourt, mealtime):
 
 if __name__ == "__main__":
     mydb, mycursor = connect()
-    date = selectDateGivenDescription(mycursor, "SPRING VACATION")
+    date = selectDateGivenDescription(mycursor, "FINAL EXAMS")
     print(date)
     disconnect(mydb, mycursor)
