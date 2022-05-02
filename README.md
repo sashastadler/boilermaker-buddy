@@ -63,7 +63,7 @@ purdueSQLUpdate is triggered by an AWS EventBridge rule called purdueSQLUpdateRu
 
 ## SQL
 
-A MySQL relational database named boilermakerBuddyDB is used with three tables, with one table storing student calendar information, another storing dining court information, and the last storing building hour information.
+A MySQL relational database named boilermakerBuddyDB is used with three tables, with one table storing student calendar information, another storing dining court information, and the last storing building abbreviation information.
 
 ### Student Calendar Table
 - Name: student_calendar
