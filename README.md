@@ -8,11 +8,8 @@ Launch the skill with the phrase "Open Boilermaker Buddy" or anything similar. O
 #### Supported topics:
 
 - Academic calendar information
-- Purdue Dining menus*
-- Building information*
-- Club information*
-
-\*In development
+- Purdue Dining menus
+- Building abbreviations
 
 # Developers
 
@@ -64,25 +61,25 @@ A MySQL relational database named boilermakerBuddyDB is used with three tables, 
   - Event Date
     - Description: Date of event entry
     - Name: event_date
-    - Data type: date
+    - Data type: DATE
     - Key: None
     - Constraints: None
   - Event Time 
     - Description: Time of event entry
     - Name: event_time
-    - Data type: time
+    - Data type: TIME
     - Key: None
     - Constraints: None 
   - Event Description
     - Description: Description of event entry
     - Name: event_description
-    - Data type: varchar(150)
+    - Data type: VARCHAR(150)
     - Key: None
     - Constraints: None
   - Event Day of Week
     - Description: Day of week of event (Monday, Tuesday, …)
     - Name: event_dow
-    - Data type: varchar(3)
+    - Data type: VARCHAR(3)
     - Key: None
     - Constraints: None
     
@@ -92,41 +89,55 @@ A MySQL relational database named boilermakerBuddyDB is used with three tables, 
   - Meal Date
     - Description: Date of meal entry
     - Name: meal_date
-    - Data type: date
+    - Data type: DATE
     - Key: None
     - Constraints: NOT NULL
   - Time Range
     - Description: Time range meal is available
     - Name: time_range
-    - Data type: varchar(20)
+    - Data type: VARCHAR(30)
     - Key: None
     - Constraints: NOT NULL
   - Meal Type
     - Description: Type of meal (lunch/breakfast/dinner)
     - Name: meal_type
-    - Data type: varchar(10)
+    - Data type: VARCHAR(30)
     - Key: None
     - Constraints: NOT NULL
   - Court Name
     - Description: Name of dining court (Ford, Wiley, etc.)
     - Name: court_name
-    - Data type: varchar(20)
+    - Data type: VARCHAR(30)
     - Key: None
     - Constraints: NOT NULL
   - Station Name
     - Description: Name of food station (BoilerQ, Sugar Hill, etc.)
     - Name: station_name
-    - Data type: varchar(20)
+    - Data type: VARCHAR(30)
     - Key: None
     - Constraints: NOT NULL
   - Food Name
     - Description: Name of food (Hamburgers, Thin Cut Fries, etc.)
     - Name: food_name
-    - Data type: varchar(20)
+    - Data type: VARCHAR(50)
     - Key: None
     - Constraints: NOT NULL
 
-### Building Hour Information
-In progress…
+### Building Abbreviations Table
+- Name: building_abbreviations
+- Attributes
+  - Building Abbreviation
+    - Description: Abbreviation of building name (HSSE, ARMS, WALC, etc.)
+    - Name: building_abbreviation
+    - Data type: VARCHAR(15)
+    - Key: None
+    - Constraints: NOT NULL
+  - Building Name
+    - Description: Building name (Wilmeth Active Learning Center, Neil Armstrong Hall of Engineering, etc.)
+    - Name: building_name
+    - Data type: VARCHAR(75)
+    - Key: None
+    - Constraints: NOT NULL
+  
 
 For information, inqueries, or any concerns, contact boilermakerbuddy@gmail.com.
