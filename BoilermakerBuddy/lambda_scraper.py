@@ -6,7 +6,7 @@
 # This sample is built using the handler classes approach in skill builder.
 from importlib.metadata import entry_points
 import logging
-import query_database
+import BoilermakerBuddy.query_database as query_database
 import entity_resolution
 from pickle import TRUE
 import ask_sdk_core.utils as ask_utils
