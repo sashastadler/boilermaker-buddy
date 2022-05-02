@@ -8,7 +8,13 @@ REQUIRES = [
     "bs4",
     "requests",
     "re",
-    "selenium"]
+    "selenium",
+    "entity_resolution",
+    "ask_sdk_core",
+    "pickle",
+    "ask_sdk_model",
+    "logging"
+    ]
 
 setuptools.setup(
     name="BoilermakerBuddy",

@@ -1,206 +1,292 @@
-from calendar import day_abbr
-from bs4 import BeautifulSoup
-import requests
-import re
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-import insertData
+# -*- coding: utf-8 -*-
 
-def lambda_handler(event, context):
-    testing = False # For testing - disables dining scraping
+# This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK for Python.
+# Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
+# session persistence, api calls, and more.
+# This sample is built using the handler classes approach in skill builder.
+from importlib.metadata import entry_points
+import logging
+import BoilermakerBuddy.query_database as query_database
+import entity_resolution
+from pickle import TRUE
+import ask_sdk_core.utils as ask_utils
 
-    ##
-    # SELENIUM SETUP
-    ##
-    driver = webdriver.Chrome('BoilermakerBuddy/chromedriver')
+from ask_sdk_core.skill_builder import SkillBuilder
+from ask_sdk_core.dispatch_components import AbstractRequestHandler
+from ask_sdk_core.dispatch_components import AbstractExceptionHandler
+from ask_sdk_core.handler_input import HandlerInput
+from ask_sdk_model import (
+    Response, IntentRequest, DialogState, SlotConfirmationStatus, Slot)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
-    ##
-    # CONNECT TO DATABASE
-    ##
-    mydb, mycursor = insertData.connect()
 
-    ##
-    # STUDENT CALENDAR
-    ##
+class LaunchRequestHandler(AbstractRequestHandler):
+    """Handler for Skill Launch."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
 
-    r = requests.get('https://www.purdue.edu/registrar/calendars/2021-22-Academic-Calendar.html')
-    data = r.text
-    soup = BeautifulSoup(data, 'html.parser')
+        return ask_utils.is_request_type("LaunchRequest")(handler_input)
 
-    td = soup.find_all('h4')
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        speak_output = "Welcome to Boilermaker Buddy!"
+        return (
+            handler_input.response_builder
+                .speak(speak_output)
+                .ask(speak_output)
+                .response
+        )
 
-    months = ['08', '09', '10', '11', '12', '01', '02', '03', '04', '05', '06', '07', '08']
-    monthsDict = {'January': '01', 'February': '02', 'March': '03', 'April': '04', 'May': '05', 'June': '06', 'July': '07', 'August': '08', 'September': '09', 'October': '10', 'November': '11', 'December': '12'}
-    dates = []
-    times = []
-    descriptions = []
-    weekdays = []
+#basic test case
+class HelloWorldIntentHandler(AbstractRequestHandler):
+    """Handler for Hello World Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("HelloWorldIntent")(handler_input)
 
-    dateRange = False  #If there is a range of dates for an entry
-    monthInd = 0
-    for month in soup.find_all(class_='calendarTable'):
-        currMonth = months[monthInd]  # Month the for loop is on
-        for event in month.tbody.find_all("tr"):
-            for i in range(3):  # Finding day, description, weekday
-                content = event.contents[(2*i)+1].get_text()
-                if (i == 0):  # Day
-                    # Extract Day #
-                    if (len(content) == 1):
-                        content = '0' + content
-                    if (monthInd < 5 and len(content) == 2):
-                        dates.append('2021-' + months[monthInd] + '-' + content)
-                    elif(len(content) == 2):
-                        dates.append('2022-' + months[monthInd] + '-' + content)
-                    else:
-                        datesMatch = re.match('(\d+)-(\d+)', content)
-                        dates.append('2022-' + months[monthInd] + '-' + datesMatch.group(1))
-                        dates.append('2022-' + months[monthInd] + '-' + datesMatch.group(2))
-                        dateRange = True
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        speak_output = "Hello!"
 
-                elif (i == 1):  #Description (time & event)
-                    # Extract Time #
-                    time = re.match('\n*(\d*:*\d* [ap].m.)', content)
-                    if time:
-                        times.append(time.group(0))
-                    else:
-                        times.append(None)
-                    # Extract Event Description #
-                    desc = re.match('\n*(\d*:*\d* [ap].m.)*([a-zA-Z0-9!@#\\$%\\^\\&*\\)\\(+=\/_\-, ]*)(\n)*', content)
-                    if desc:
-                        descriptions.append(desc.group(2).lstrip())
-                    else:
-                        descriptions.append(None)
+        return (
+            handler_input.response_builder
+                .speak(speak_output)
+                # .ask("add a reprompt if you want to keep the session open for the user to respond")
+                .response
+        )
 
-                elif (i == 2):  # Weekday
-                    # Extract Weekday #
-                    weekday = re.match('([A-Za-z])*(-([A-Za-z]*))*', content)
-                    if weekday:
-                        weekdays.append(weekday.group(0))
-                    else:
-                        weekdays.append(None)
-                    if dateRange:
-                        times.append(times[-1])
-                        descriptions.append(descriptions[-1])
-                        weekdays.append(weekdays[-1])
-                        dateRange = False
-        monthInd += 1
+def getValueFromSlot(slotObj):
+    n = slotObj.value
+    return n
 
-    # Insert Student Calendar data into database #
+class AcademicCalendarIntentHandler(AbstractRequestHandler):
+    #Handler for Academic Calendar Intent
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("AcademicCalendarIntent")(handler_input)
 
-    #Format data
-    calendarData = [[x] + [y] + [z] + [w] for x, y, z, w in zip(*[iter(dates)], *[iter(weekdays)], *[iter(descriptions)], *[iter(times)])]
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        slotObj = handler_input.request_envelope.request.intent.slots["calevent"]
+        acCalEventValue = getValueFromSlot(slotObj)
+        acCalEvent = entity_resolution.resolveEvent(acCalEventValue) # resolve to the "official" name for the event
+        
+        #get date from database, return date as speakable string
+        dateString = query_database.queryDate(acCalEvent)
+        if acCalEvent != None:
+            speak_output = dateString + "."
+            # speak_output = "You said " + acCalEvent
+            return (
+                handler_input.response_builder
+                .speak(speak_output)
+                # .ask("add a reprompt if you want to keep the session open for the user to respond")
+                .response
+                )
+        else:
+            return (
+                handler_input.response_builder
+                .speak("event value is none").reponse
+                )
 
-    #Insert into student_calendar table
-    insertData.insertStudentCalendar(mydb, mycursor, calendarData)
+class DiningMenuIntentHandler(AbstractRequestHandler):
+    #Handler for Dining Menu Intent
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("DiningMenuIntent")(handler_input)
+        
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
 
-    ##
-    # STUDENT DINING
-    ##
-    courts = {} # Dictionary of dictionaries - each sub dictionary details stations(key) and meals(values)
-    courtURLs = []
-    diningMenu = [] # Complete menu
+        mealname = None
+        mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
+        mealname = entity_resolution.resolveMealtime(mealname)
 
-    # MENU #
+        diningCourt = None
+        diningCourt = handler_input.request_envelope.request.intent.slots["diningCourt"].value
+        diningCourt = entity_resolution.resolveCourt(diningCourt)
+        #return list of foods at mealtime at diningcourt
 
-    baseDiningURL = 'https://dining.purdue.edu/menus/'
+        if mealname != None and diningCourt != None:
+            speak_output = "You said " + str(mealname) + " at " + str(diningCourt) + " ."
+            return (
+                handler_input.response_builder
+                .speak(speak_output)
+                # .ask("add a reprompt if you want to keep the session open for the user to respond")
+                .response
+                )
+        else:
+            return (
+                handler_input.response_builder
+                .speak("Fail").reponse
+                )
 
-    driver.get(baseDiningURL)
+class DiningTimeIntentHandler(AbstractRequestHandler):
+    #Handler for Dining TIME Intent
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("DiningTimeIntent")(handler_input)
+        
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
 
-    # Get list of dining court URLs #
+        #mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
+        mealname = None
+        mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
+        mealname = entity_resolution.resolveMealtime(mealname)
+        
+        diningCourt = None
+        diningCourt = handler_input.request_envelope.request.intent.slots["diningCourt"].value
+        diningCourt = entity_resolution.resolveCourt(diningCourt)
 
-    driverCourtURLS = driver.find_elements(By.CLASS_NAME, "menus__home-content--link")
-    for driverCourtURL in driverCourtURLS:
-        courtURLs.append(driverCourtURL.get_attribute('href')) 
+        start = False
+        if handler_input.request_envelope.request.intent.slots["diningCourt"].value == "start":
+            start = True # user asked for start time
+        else:
+            start = False # user asked for end time
+        
+        #find mealname and diningCourt in database.
+        #return time of start if start=True, otherwise end time returned
+        if mealname != None and diningCourt != None:
+            speak_output = "You said " + str(mealname) + " ."
+            return (
+                handler_input.response_builder
+                .speak(speak_output)
+                # .ask("add a reprompt if you want to keep the session open for the user to respond")
+                .response
+                )
+        else:
+            return (
+                handler_input.response_builder
+                .speak("Fail").reponse
+                )
 
-    #  DINING LIST = [[0-Date, 1-Meal type, 2-Meal Time, 3-Court, 4-Station, 5-Food], [...]]
+class HelpIntentHandler(AbstractRequestHandler):
+    """Handler for Help Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("AMAZON.HelpIntent")(handler_input)
 
-    # Get menu
-    for courtURL in courtURLs: # Iterate through dining courts
-        if testing == True: 
-            break
-        driver.get(courtURL)
-        courtName = driver.find_element(By.XPATH, '//*[@id="app"]/div/header/div/div[1]/a/h1').text
-        court = {}
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        speak_output = "You can ask about anything from the student calendar, about today's meals, and building information. What would you like to know?"
 
-        driver.find_element(By.CLASS_NAME, "datepicker").click() # Activates dropdown menu of dates
-        dateElements = driver.find_elements(By.CLASS_NAME, "datepicker-item")
-        dateURLS = []
-        for dateElement in dateElements:
-            dateURLS.append(dateElement.get_attribute('href'))
+        return (
+            handler_input.response_builder
+                .speak(speak_output)
+                .ask(speak_output)
+                .response
+        )
 
-        mealURLS = []
-        for dateURL in dateURLS: # Iterate through available dates
-            mealURLS = []
-            driver.get(dateURL)
-            if courtURLs.index(courtURL) < 7: # If not ON-the-GO location
-                driver.find_element(By.CLASS_NAME, "mealpicker").click() # Activates dropdown menu of mealtimes
-                mealElements = driver.find_element(By.CLASS_NAME, "mealpicker-menu-meals")
-                for mealElement in mealElements.find_elements(By.TAG_NAME, "a"):
-                    mealURLS.append(mealElement.get_attribute('href'))
-            else: # If ON-the-GO location
-                mealURLS.append(dateURL) # iffy
-                
-            for mealURL in mealURLS:
-                driver.get(mealURL)
-                if driver.find_element(By.CLASS_NAME, "mealpicker-meal-times").text != "Closed": # If dining court is serving that meal
-                    for station in driver.find_elements(By.CLASS_NAME, "station"): # Iterate through stations in dining court
-                        stationName = station.find_element(By.CLASS_NAME, "station-name").text
 
-                        for foodItem in station.find_elements(By.CLASS_NAME, "station-item-text"): # Iterate through food items in station
-                            # [0-Date, 1-Meal type, 2-Meal Time, 3-Court, 4-Station, 5-Food]
-                            placeholder = True
+class CancelOrStopIntentHandler(AbstractRequestHandler):
+    """Single handler for Cancel and Stop Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return (ask_utils.is_intent_name("AMAZON.CancelIntent")(handler_input) or
+                ask_utils.is_intent_name("AMAZON.StopIntent")(handler_input))
 
-                            #Some regex to format dateItem
-                            dateTemp = driver.find_element(By.CLASS_NAME, "datepicker").text # Format: April 3rd, 2022
-                            dateTemp = re.match('(.*) (\d*), (\d{4})', dateTemp)
-                            day = dateTemp.group(2) 
-                            if (len(day) == 1):
-                                day = '0' + day   
-                            dateItem = dateTemp.group(3) + '-' + monthsDict[dateTemp.group(1)] + '-' + dateTemp.group(2) # Format: 2022-04-03                 
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        speak_output = "Goodbye!"
 
-                            mealTypeItem = driver.find_element(By.CLASS_NAME, "mealpicker-meal-name").text
-                            mealTimeItem = driver.find_element(By.CLASS_NAME, "mealpicker-meal-times").text # Format: 10am - 2pm
-                            courtNameItem = driver.find_element(By.XPATH, '//*[@id="app"]/div/header/div/div[1]/a').text # Format: Earhart Dining Court
-                            stationNameItem = stationName.partition("\n")[0]
-                            foodNameItem = foodItem.text
-                            diningMenu.append([dateItem, mealTypeItem, mealTimeItem, courtNameItem, stationNameItem, foodNameItem])
+        return (
+            handler_input.response_builder
+                .speak(speak_output)
+                .response
+        )
 
-    #Format data                        
-    diningMenu = [tuple(x) for x in diningMenu]
+class FallbackIntentHandler(AbstractRequestHandler):
+    """Single handler for Fallback Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("AMAZON.FallbackIntent")(handler_input)
 
-    #Insert into dining_courts table
-    insertData.insertDiningCourts(mydb, mycursor, diningMenu)
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        logger.info("In FallbackIntentHandler")
+        speech = "Hmm, I'm not sure. What would you like to do?"
+        reprompt = "I didn't catch that. What can I help you with?"
 
-    # BUILDING ABBREVIATIONS #
+        return handler_input.response_builder.speak(speech).ask(reprompt).response
 
-    buildingInfo = []
+class SessionEndedRequestHandler(AbstractRequestHandler):
+    """Handler for Session End."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_request_type("SessionEndedRequest")(handler_input)
 
-    driver.get('https://www.purdue.edu/physicalfacilities/units/facilities-operations/building-deputies/directory.html')
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
 
-    buildingTable = driver.find_element(By.XPATH, '/html/body/div[5]/div/div/div[1]/table/tbody')
+        # Any cleanup logic goes here.
 
-    for row in buildingTable.find_elements(By.TAG_NAME, "tr"):
-        rowElements = row.find_elements(By.TAG_NAME, "td")
-        if len(rowElements) != 0: # Ensures something is in row - no errors
-            # Split for multiple abbreviations in one entry
-            if ',' in rowElements[0].text:
-                buildingNames = rowElements[0].text.split(',')
-                for name in buildingNames:
-                    buildingEntry = [name.strip(), rowElements[2].text]
-                    buildingInfo.append(buildingEntry)
-            else: 
-                buildingEntry = [rowElements[0].text, rowElements[2].text]
-                buildingInfo.append(buildingEntry)
+        return handler_input.response_builder.response
 
-    #Format data                        
-    buildingInfo = [tuple(x) for x in buildingInfo]   
 
-    #Insert into dining_courts table
-    insertData.insertBuildingAbbreviations(mydb, mycursor, buildingInfo)
+class IntentReflectorHandler(AbstractRequestHandler):
+    """The intent reflector is used for interaction model testing and debugging.
+    It will simply repeat the intent the user said. You can create custom handlers
+    for your intents by defining them above, then also adding them to the request
+    handler chain below.
+    """
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_request_type("IntentRequest")(handler_input)
 
-    # Close Webdriver #
-    driver.close()
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        intent_name = ask_utils.get_intent_name(handler_input)
+        speak_output = "You just triggered " + intent_name + "."
 
-    # Disconnect from database #
-    insertData.disconnect(mydb, mycursor)
+        return (
+            handler_input.response_builder
+                .speak(speak_output)
+                # .ask("add a reprompt if you want to keep the session open for the user to respond")
+                .response
+        )
 
+
+class CatchAllExceptionHandler(AbstractExceptionHandler):
+    """Generic error handling to capture any syntax or routing errors. If you receive an error
+    stating the request handler chain is not found, you have not implemented a handler for
+    the intent being invoked or included it in the skill builder below.
+    """
+    def can_handle(self, handler_input, exception):
+        # type: (HandlerInput, Exception) -> bool
+        return True
+
+    def handle(self, handler_input, exception):
+        # type: (HandlerInput, Exception) -> Response
+        logger.error(exception, exc_info=True)
+
+        speak_output = "This is the catch all exception handler. There may have been a syntax or routing error."
+
+        return (
+            handler_input.response_builder
+                .speak(speak_output)
+                .ask(speak_output)
+                .response
+        )
+
+# The SkillBuilder object acts as the entry point for your skill, routing all request and response
+# payloads to the handlers above. Make sure any new handlers or interceptors you've
+# defined are included below. The order matters - they're processed top to bottom.
+
+
+sb = SkillBuilder()
+
+sb.add_request_handler(LaunchRequestHandler())
+sb.add_request_handler(HelloWorldIntentHandler())
+sb.add_request_handler(AcademicCalendarIntentHandler())
+sb.add_request_handler(DiningMenuIntentHandler())
+sb.add_request_handler(DiningTimeIntentHandler())
+sb.add_request_handler(HelpIntentHandler())
+sb.add_request_handler(CancelOrStopIntentHandler())
+sb.add_request_handler(FallbackIntentHandler())
+sb.add_request_handler(SessionEndedRequestHandler())
+sb.add_request_handler(IntentReflectorHandler()) # make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
+
+sb.add_exception_handler(CatchAllExceptionHandler())
+
+lambda_handler = sb.lambda_handler()
