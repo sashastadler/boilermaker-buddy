@@ -57,6 +57,10 @@ The elements of buildingInfo are then uploaded into our SQL database.
 
 The lambda function is what the Alexa Skill uses to handle user requests using the Alexa Skill SDK. There is one handler for each table of information that is in the SQL database. Additionally, each handler is documented in the JSON configuration file, which also lists the possible utterances that are meant to trigger that handler and the slots (and acceptable slot values and synonyms) for each handler.
 
+A different lambda function called purdueSQLUpdate hosts the webscraping code and will need to be updated via zip file anytime a new version of the code is ready to be pushed to production.  The zip file must contain the code and the libraries that the code uses, as lambda does not have these libraries.
+
+purdueSQLUpdate is triggered by an AWS EventBridge rule called purdueSQLUpdateRule which is configured to run purdueSQLUpdate every day at 12:00AM EST.
+
 ## SQL
 
 A MySQL relational database named boilermakerBuddyDB is used with three tables, with one table storing student calendar information, another storing dining court information, and the last storing building hour information.
