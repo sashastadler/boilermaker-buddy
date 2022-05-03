@@ -100,11 +100,42 @@ class DiningMenuIntentHandler(AbstractRequestHandler):
         slotObj = handler_input.request_envelope.request.intent.slots["diningCourts"]
         diningSlot = getValueFromSlot(slotObj)
         diningC = entity_resolution.resolveCourt(diningSlot)
-        
         #return list of foods at mealtime at diningc
         foodList = query_database.queryMenu(diningC, mealname)
         if mealname != None and diningC != None:
             speak_output = "For " + str(mealname) + ", " + str(diningC) + " is serving " + foodList + "."
+            return (
+                handler_input.response_builder
+                .speak(speak_output)
+                # .ask("add a reprompt if you want to keep the session open for the user to respond")
+                .response
+                )
+        else:
+            return (
+                handler_input.response_builder
+                .speak("Fail").reponse
+                )
+
+class FoodIntentHandler(AbstractRequestHandler):
+    #Handler for Food Intent
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("FoodIntent")(handler_input)
+        
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+
+        # get slot values
+        slotObj = handler_input.request_envelope.request.intent.slots["diningCourts"]
+        diningSlot = getValueFromSlot(slotObj)
+        diningC = entity_resolution.resolveCourt(diningSlot)
+        
+        slotObj = handler_input.request_envelope.request.intent.slots["food"]
+        foodSlot = getValueFromSlot(slotObj)
+        #return list of foods at mealtime at diningc
+        servingInfo = query_database.checkMenu(diningC, foodSlot)
+        if diningC != None:
+            speak_output = servingInfo + "."
             return (
                 handler_input.response_builder
                 .speak(speak_output)
@@ -254,7 +285,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
         # type: (HandlerInput, Exception) -> Response
         logger.error(exception, exc_info=True)
 
-        speak_output = "This is the catch all exception handler. There may have been a syntax or routing error."
+        speak_output = "Uh Oh. There may have been a syntax or routing error."
 
         return (
             handler_input.response_builder
@@ -274,8 +305,8 @@ sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(AcademicCalendarIntentHandler())
 sb.add_request_handler(DiningMenuIntentHandler())
+sb.add_request_handler(FoodIntentHandler())
 sb.add_request_handler(BuildingIntentHandler())
-#sb.add_request_handler(TimeIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
