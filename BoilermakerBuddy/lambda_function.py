@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import query_database
+import entity_resolution
 from pickle import TRUE
 import ask_sdk_core.utils as ask_utils
 
@@ -40,7 +41,7 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "this works!"
+        speak_output = "Hello!"
 
         return (
             handler_input.response_builder
@@ -49,7 +50,7 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
                 .response
         )
 
-def getResolutionNameFromSlot(slotObj):
+def getValueFromSlot(slotObj):
     n = slotObj.value
     return n
 
@@ -61,16 +62,15 @@ class AcademicCalendarIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        acCalEvent = handler_input.request_envelope.request.intent.slots["calevent"].value ##returns what was spoken, not the resolved value
-        
         slotObj = handler_input.request_envelope.request.intent.slots["calevent"]
-        acCalEvent = getResolutionNameFromSlot(slotObj)
+        acCalEventValue = getValueFromSlot(slotObj)
+        acCalEvent = entity_resolution.resolveEvent(str(acCalEventValue)) # resolve to the "official" name for the event
         
         #get date from database, return date as speakable string
-        # dateString = query_database.queryDate(acCalEvent)
+        dateString = query_database.queryDate(acCalEvent)
         if acCalEvent != None:
-            # speak_output = acCalEvent + " is on " + dateString + "."
-            speak_output = "You said " + acCalEvent
+            speak_output = dateString + "."
+            # speak_output = "You said " + acCalEvent
             return (
                 handler_input.response_builder
                 .speak(speak_output)
@@ -101,7 +101,7 @@ class DiningMenuIntentHandler(AbstractRequestHandler):
         #return list of foods at mealtime at diningcourt
 
         if mealname != None and diningCourt != None:
-            speak_output = "You said " + str(mealname) + " ."
+            speak_output = "You said " + str(mealname) + " at " + str(diningCourt) + " ."
             return (
                 handler_input.response_builder
                 .speak(speak_output)
@@ -113,8 +113,8 @@ class DiningMenuIntentHandler(AbstractRequestHandler):
                 handler_input.response_builder
                 .speak("Fail").reponse
                 )
-
-class DiningMenuIntentHandler(AbstractRequestHandler):
+'''
+class DiningTimeIntentHandler(AbstractRequestHandler):
     #Handler for Dining TIME Intent
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
@@ -151,7 +151,7 @@ class DiningMenuIntentHandler(AbstractRequestHandler):
                 handler_input.response_builder
                 .speak("Fail").reponse
                 )
-
+'''
 class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
     def can_handle(self, handler_input):
@@ -271,6 +271,7 @@ sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(AcademicCalendarIntentHandler())
 sb.add_request_handler(DiningMenuIntentHandler())
+#sb.add_request_handler(DiningTimeIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
