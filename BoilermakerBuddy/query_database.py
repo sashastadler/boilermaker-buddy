@@ -1,6 +1,6 @@
 from email.utils import formatdate
 import mysql.connector
-from datetime import datetime
+from datetime import datetime, date
 
 ##
 # SQL Stuff!
@@ -118,6 +118,33 @@ def selectFoodGivenCourt(mycursor, diningCourt, mealtime):
 
     except mysql.connector.Error as error:
         print("Failed to insert into MySQL table {}".format(error))
+##
+# Select food given mealtime and dining court
+##
+def checkFoodGivenCourt(mycursor, diningCourt, food):
+
+    try:
+        # Select data from tables
+        today = date.today()
+        menuSQL = "SELECT meal_type FROM dining_courts WHERE court_name = '" + diningCourt + "' AND food_name = '" + food + "' AND meal_date = '" + str(today) +"';"
+        mycursor.execute(menuSQL)
+
+        menuData = mycursor.fetchall() # returns a list of foods
+        if(DEBUG > 0):
+            print(menuData)
+            print(len(menuData))
+        foodString = "Yes, " + diningCourt + " is serving " + food + " for "
+        if(len(menuData) == 0):
+            return "No, " + diningCourt + " is not serving " + food + "."
+        for a in range(len(menuData)): #for multiple foods
+            if(a > 0): #add "and" but not before 1st item
+                foodString = foodString + " and "
+            foodTime = menuData[a][0]
+            foodString = foodString + foodTime
+        return foodString
+
+    except mysql.connector.Error as error:
+        print("Failed to insert into MySQL table {}".format(error))
 
 ##
 # Select building given building code
@@ -162,13 +189,20 @@ def queryMenu(diningcourt, mealtime):
     disconnect(mydb, mycursor)
     return foodList
 
+def checkMenu(diningcourt, food):
+    mydb, mycursor = connect()
+    foodInfo = checkFoodGivenCourt(mycursor, str(diningcourt), str(food))
+    disconnect(mydb, mycursor)
+    return foodInfo
+
 def queryBuilding(buildingCode):
     mydb, mycursor = connect()
     buildingName = selectBuildingGivenCode(mycursor, str(buildingCode))
     disconnect(mydb, mycursor)
     return buildingName
+
 if __name__ == "__main__":
     mydb, mycursor = connect()
-    date = selectBuildingGivenCode(mycursor, "BHEE")
+    date = checkFoodGivenCourt(mycursor, "Wiley Dining Court", "Scrambled Eggs")
     print(date)
     disconnect(mydb, mycursor)
