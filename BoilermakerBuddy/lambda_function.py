@@ -1,13 +1,6 @@
 # -*- coding: utf-8 -*-
-
-# This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK for Python.
-# Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
-# session persistence, api calls, and more.
-# This sample is built using the handler classes approach in skill builder.
-from importlib.metadata import entry_points
 import logging
-import BoilermakerBuddy.query_database as query_database
-import entity_resolution
+import query_database
 from pickle import TRUE
 import ask_sdk_core.utils as ask_utils
 
@@ -47,7 +40,7 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "Hello!"
+        speak_output = "this works!"
 
         return (
             handler_input.response_builder
@@ -56,7 +49,7 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
                 .response
         )
 
-def getValueFromSlot(slotObj):
+def getResolutionNameFromSlot(slotObj):
     n = slotObj.value
     return n
 
@@ -68,15 +61,16 @@ class AcademicCalendarIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
+        acCalEvent = handler_input.request_envelope.request.intent.slots["calevent"].value ##returns what was spoken, not the resolved value
+        
         slotObj = handler_input.request_envelope.request.intent.slots["calevent"]
-        acCalEventValue = getValueFromSlot(slotObj)
-        acCalEvent = entity_resolution.resolveEvent(acCalEventValue) # resolve to the "official" name for the event
+        acCalEvent = getResolutionNameFromSlot(slotObj)
         
         #get date from database, return date as speakable string
-        dateString = query_database.queryDate(acCalEvent)
+        # dateString = query_database.queryDate(acCalEvent)
         if acCalEvent != None:
-            speak_output = dateString + "."
-            # speak_output = "You said " + acCalEvent
+            # speak_output = acCalEvent + " is on " + dateString + "."
+            speak_output = "You said " + acCalEvent
             return (
                 handler_input.response_builder
                 .speak(speak_output)
@@ -100,15 +94,14 @@ class DiningMenuIntentHandler(AbstractRequestHandler):
 
         mealname = None
         mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
-        mealname = entity_resolution.resolveMealtime(mealname)
-
+        
         diningCourt = None
         diningCourt = handler_input.request_envelope.request.intent.slots["diningCourt"].value
-        diningCourt = entity_resolution.resolveCourt(diningCourt)
+        
         #return list of foods at mealtime at diningcourt
 
         if mealname != None and diningCourt != None:
-            speak_output = "You said " + str(mealname) + " at " + str(diningCourt) + " ."
+            speak_output = "You said " + str(mealname) + " ."
             return (
                 handler_input.response_builder
                 .speak(speak_output)
@@ -121,7 +114,7 @@ class DiningMenuIntentHandler(AbstractRequestHandler):
                 .speak("Fail").reponse
                 )
 
-class DiningTimeIntentHandler(AbstractRequestHandler):
+class DiningMenuIntentHandler(AbstractRequestHandler):
     #Handler for Dining TIME Intent
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
@@ -133,12 +126,10 @@ class DiningTimeIntentHandler(AbstractRequestHandler):
         #mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
         mealname = None
         mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
-        mealname = entity_resolution.resolveMealtime(mealname)
         
         diningCourt = None
         diningCourt = handler_input.request_envelope.request.intent.slots["diningCourt"].value
-        diningCourt = entity_resolution.resolveCourt(diningCourt)
-
+        
         start = False
         if handler_input.request_envelope.request.intent.slots["diningCourt"].value == "start":
             start = True # user asked for start time
@@ -169,7 +160,7 @@ class HelpIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "You can ask about anything from the student calendar, about today's meals, and building information. What would you like to know?"
+        speak_output = "You can say hello to me! How can I help?"
 
         return (
             handler_input.response_builder
@@ -205,7 +196,7 @@ class FallbackIntentHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In FallbackIntentHandler")
-        speech = "Hmm, I'm not sure. What would you like to do?"
+        speech = "Hmm, I'm not sure. You can say Hello or Help. What would you like to do?"
         reprompt = "I didn't catch that. What can I help you with?"
 
         return handler_input.response_builder.speak(speech).ask(reprompt).response
@@ -280,7 +271,6 @@ sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(AcademicCalendarIntentHandler())
 sb.add_request_handler(DiningMenuIntentHandler())
-sb.add_request_handler(DiningTimeIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
