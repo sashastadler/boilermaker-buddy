@@ -45,6 +45,12 @@
                         }
                     ],
                     "samples": [
+                        "when does {calevent}",
+                        "when the {calevent}",
+                        "ask boilermaker buddy when the {calevent}",
+                        "tell me when is {calevent}",
+                        "when are the {calevent}",
+                        "when are we {calevent}",
                         "when is the {calevent}",
                         "when do {calevent}",
                         "tell when {calevent} is",
@@ -73,50 +79,59 @@
                             "type": "mealtime"
                         },
                         {
-                            "name": "purdueLocation",
+                            "name": "diningCourts",
                             "type": "diningCourts"
+                        },
+                        {
+                            "name": "food",
+                            "type": "AMAZON.Food"
                         }
                     ],
                     "samples": [
-                        "what's for {mealtime} at {purdueLocation}"
+                        "whats for {diningCourts} {mealtime}",
+                        "whats for the {diningCourts} {mealtime}",
+                        "what's {diningCourts} serving for {mealtime}",
+                        "what can i eat at {diningCourts} at {mealtime} ",
+                        "what can i eat at {diningCourts} for {mealtime} ",
+                        "what is {diningCourts} serving for {mealtime} ",
+                        "what's for {mealtime} at {diningCourts} "
                     ]
                 },
                 {
-                    "name": "DiningTimeIntent",
+                    "name": "BuildingIntent",
                     "slots": [
                         {
-                            "name": "diningCourt",
-                            "type": "diningCourts"
-                        },
-                        {
-                            "name": "mealtime",
-                            "type": "mealtime"
-                        },
-                        {
-                            "name": "startEnd",
-                            "type": "startEnd"
+                            "name": "buildingCodes",
+                            "type": "buildingCodes"
                         }
                     ],
                     "samples": [
-                        "when is the {startEnd} of {mealtime}",
-                        "when does {mealtime} {startEnd}",
-                        "when does {diningCourt} {startEnd} serving food",
-                        "when does {diningCourt} {startEnd} serving food at {mealtime}",
-                        "when is the {startEnd} of {mealtime} at {diningCourt}",
-                        "when does {mealtime} {startEnd} at {diningCourt}",
-                        "when does {diningCourt} {startEnd} {mealtime}"
+                        "what's {buildingCodes}",
+                        "what is {buildingCodes}",
+                        "what does {buildingCodes} stand for",
+                        "what does {buildingCodes} mean"
                     ]
                 },
                 {
-                    "name": "SingIntent",
-                    "slots": [],
+                    "name": "FoodIntent",
+                    "slots": [
+                        {
+                            "name": "diningCourts",
+                            "type": "diningCourts"
+                        },
+                        {
+                            "name": "food",
+                            "type": "AMAZON.Food"
+                        }
+                    ],
                     "samples": [
-                        "sing the purdue song",
-                        "hail to old purdue",
-                        "hail to purdue",
-                        "sing hail hail to old purdue",
-                        "sing a song",
-                        "sing hail to old purdue"
+                        "will {diningCourts} have {food}",
+                        "will {diningCourts} have {food} today",
+                        "does {diningCourts} have {food} today",
+                        "is {diningCourts} serving {food} today",
+                        "does {diningCourts} have {food}",
+                        "is {food} at {diningCourts}",
+                        "is {diningCourts} serving {food}"
                     ]
                 }
             ],
@@ -324,47 +339,47 @@
                     "values": [
                         {
                             "name": {
-                                "value": "Windsor",
+                                "value": "Windsor Dining Court",
                                 "synonyms": [
-                                    "Windsor Dining Hall",
-                                    "Windsor Dining Court"
+                                    "Windsor",
+                                    "Windsor Dining Hall"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "Hillenbrand",
+                                "value": "Hillenbrand Dining Court",
                                 "synonyms": [
+                                    "Hillenbrand",
                                     "Hillenbrand Dining Hall",
-                                    "Hillenbrand Dining Court",
                                     "hilly"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "Ford",
+                                "value": "Ford Dining Court",
                                 "synonyms": [
-                                    "Ford Dining Hall",
-                                    "Ford  Dining Court"
+                                    "Ford",
+                                    "Ford Dining Hall"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "Earhart",
+                                "value": "Earhart Dining Court",
                                 "synonyms": [
-                                    "Earhart  Dining Hall",
-                                    "Earhart  Dining Court"
+                                    "Earhart",
+                                    "Earhart  Dining Hall"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "Wiley",
+                                "value": "Wiley Dining Court",
                                 "synonyms": [
-                                    "Wiley Dining Hall",
-                                    "Wiley  Dining Court"
+                                    "Wiley",
+                                    "Wiley Dining Hall"
                                 ]
                             }
                         }
@@ -424,24 +439,1226 @@
                     ]
                 },
                 {
-                    "name": "startEnd",
+                    "name": "buildingCodes",
                     "values": [
                         {
                             "name": {
-                                "value": "stop",
-                                "synonyms": [
-                                    "conclude",
-                                    "end"
-                                ]
+                                "value": "TONG"
                             }
                         },
                         {
                             "name": {
-                                "value": "start",
-                                "synonyms": [
-                                    "commence",
-                                    "begin"
-                                ]
+                                "value": "WWG"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "WTHR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "WSLR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "WRIT"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "WOOD"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "WILY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "WGLR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "WEST"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "WDCT"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "WARN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "WANG"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "WALC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "WADE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "VPTH"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "VPRB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "VOIN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "VMIF"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "VLAB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "VETFARMS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "VCPR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "VA2"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "VA1"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "VAWT"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "UPSB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "UPOF"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "UPOB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "UNIV"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "U"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "TURF"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "TSWF"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "TRFM"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "TREE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "TREC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "TRAM"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "TERY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "TERM"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "TEL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "TARK"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "STON"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "STEW"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "STDN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SPUR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SOIL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SOCC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SMTH"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SMLY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SIML"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SHRV"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SHLY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SCPA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SCHW"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SCHO"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SCHL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SBPB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SBCH"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SALT"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "RHPH"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "REC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "RAWL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "RALR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "RAIL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PVIL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PUSH"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PTC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PSYC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PRSV"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PRIX"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PRID"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PRCE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "POTR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PMUC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PMU"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PKRW"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PKRF"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PJIS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PHYS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PGW"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PGU"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PGSC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PGNW"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PGMD"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PGH"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PGGH"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PGG"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PFSB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PFEN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PAO"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PAGE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "OWEN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "OLMN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "NWCP"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "NWAS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "NLSN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "NISW"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "NACC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MTHW"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MSEE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MRRT"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MRI1"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MRGN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MRDS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MRDH"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MOLL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MMSB3"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MMSB2"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MMSB1"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MMDC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MJIS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ME"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MCUT"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MATH"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MANN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MACK"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LYNN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LYLE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LWSN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LSR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LSPS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LSA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LOLC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LMST"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LMSB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LMSA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LMBS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LINS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LILY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LCC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LAMB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "KRCH"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "KRAN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "KNOY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "KFPC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "KCTR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "JNSN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ICSC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HULL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HRTP"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HOVD"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HORT"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HOCK"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HNLY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HMMT"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HLTP"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HLAB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HILL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HIKS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HGRH"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HGR4"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HESB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HERL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HEAV"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HCRN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HAWK"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HARR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HANS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HAMP"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HAGL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HAAS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "GSMB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "GRVL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "GRS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "GRIS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "GMPS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "GMGF"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "GMF"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "GCMB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FWLR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FSTW"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FSTE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FSTC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FRNY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FPRD"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FORS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FORD"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FOPN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FLEX"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ERHT"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ELLT"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "EHSB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "EHSA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "EFOB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "EEL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ECEC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "DYE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "DUHM"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "DUDL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "DRUG"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "DOYL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "DMNT"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "DLR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "DAUC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "DANL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CTEB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CRTN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CREC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CQW"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CQS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CQNW"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CQNE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CQE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "COMP"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CL50"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CHAS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CHAF"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BTV"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BRWN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BRUN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BRNG"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BRK"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BRFM"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BRES"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BREQ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BOWN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BMSW"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BMSN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BMSE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BIND"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BIDC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BHEE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BELL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BECK"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BCHM"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BCC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BBPB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BBCH"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BALY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ASREC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ASB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ASA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ARMS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AQUA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AIDC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AHF"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AGAD"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AERO"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ADM"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ADDL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ACRE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ABE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AAPF"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AACC"
                             }
                         }
                     ]

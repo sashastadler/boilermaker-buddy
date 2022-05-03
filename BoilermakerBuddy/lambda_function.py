@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
-
-# This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK for Python.
-# Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
-# session persistence, api calls, and more.
-# This sample is built using the handler classes approach in skill builder.
-from importlib.metadata import entry_points
 import logging
-import BoilermakerBuddy.query_database as query_database
+import query_database
 import entity_resolution
 from pickle import TRUE
 import ask_sdk_core.utils as ask_utils
@@ -70,7 +64,7 @@ class AcademicCalendarIntentHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
         slotObj = handler_input.request_envelope.request.intent.slots["calevent"]
         acCalEventValue = getValueFromSlot(slotObj)
-        acCalEvent = entity_resolution.resolveEvent(acCalEventValue) # resolve to the "official" name for the event
+        acCalEvent = entity_resolution.resolveEvent(str(acCalEventValue)) # resolve to the "official" name for the event
         
         #get date from database, return date as speakable string
         dateString = query_database.queryDate(acCalEvent)
@@ -98,17 +92,18 @@ class DiningMenuIntentHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
 
-        mealname = None
-        mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
-        mealname = entity_resolution.resolveMealtime(mealname)
+        # get slot values
+        slotObj = handler_input.request_envelope.request.intent.slots["mealtime"]
+        mealSlot = getValueFromSlot(slotObj)
+        mealname = entity_resolution.resolveMealtime(mealSlot)
 
-        diningCourt = None
-        diningCourt = handler_input.request_envelope.request.intent.slots["diningCourt"].value
-        diningCourt = entity_resolution.resolveCourt(diningCourt)
-        #return list of foods at mealtime at diningcourt
-
-        if mealname != None and diningCourt != None:
-            speak_output = "You said " + str(mealname) + " at " + str(diningCourt) + " ."
+        slotObj = handler_input.request_envelope.request.intent.slots["diningCourts"]
+        diningSlot = getValueFromSlot(slotObj)
+        diningC = entity_resolution.resolveCourt(diningSlot)
+        #return list of foods at mealtime at diningc
+        foodList = query_database.queryMenu(diningC, mealname)
+        if mealname != None and diningC != None:
+            speak_output = "For " + str(mealname) + ", " + str(diningC) + " is serving " + foodList + "."
             return (
                 handler_input.response_builder
                 .speak(speak_output)
@@ -121,34 +116,64 @@ class DiningMenuIntentHandler(AbstractRequestHandler):
                 .speak("Fail").reponse
                 )
 
-class DiningTimeIntentHandler(AbstractRequestHandler):
-    #Handler for Dining TIME Intent
+class FoodIntentHandler(AbstractRequestHandler):
+    #Handler for Food Intent
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return ask_utils.is_intent_name("DiningTimeIntent")(handler_input)
+        return ask_utils.is_intent_name("FoodIntent")(handler_input)
         
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
 
-        #mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
-        mealname = None
-        mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
-        mealname = entity_resolution.resolveMealtime(mealname)
+        # get slot values
+        slotObj = handler_input.request_envelope.request.intent.slots["diningCourts"]
+        diningSlot = getValueFromSlot(slotObj)
+        diningC = entity_resolution.resolveCourt(diningSlot)
         
-        diningCourt = None
-        diningCourt = handler_input.request_envelope.request.intent.slots["diningCourt"].value
-        diningCourt = entity_resolution.resolveCourt(diningCourt)
-
-        start = False
-        if handler_input.request_envelope.request.intent.slots["diningCourt"].value == "start":
-            start = True # user asked for start time
+        slotObj = handler_input.request_envelope.request.intent.slots["food"]
+        foodSlot = getValueFromSlot(slotObj)
+        #return list of foods at mealtime at diningc
+        servingInfo = query_database.checkMenu(diningC, foodSlot)
+        if diningC != None:
+            speak_output = servingInfo + "."
+            return (
+                handler_input.response_builder
+                .speak(speak_output)
+                # .ask("add a reprompt if you want to keep the session open for the user to respond")
+                .response
+                )
         else:
-            start = False # user asked for end time
+            return (
+                handler_input.response_builder
+                .speak("Fail").reponse
+                )
+
+class BuildingIntentHandler(AbstractRequestHandler):
+    #Handler for Dining Menu Intent
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("BuildingIntent")(handler_input)
         
-        #find mealname and diningCourt in database.
-        #return time of start if start=True, otherwise end time returned
-        if mealname != None and diningCourt != None:
-            speak_output = "You said " + str(mealname) + " ."
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+
+        # get slot values
+        slotObj = handler_input.request_envelope.request.intent.slots["buildingCodes"]
+        building = getValueFromSlot(slotObj)
+        
+        #return list of foods at mealtime at diningc
+        buildingCode = query_database.queryBuilding(building)
+        if building == "BHEE":
+            buildingCode = buildingCode + ", formerly known as Electrical Engineering"
+        elif building == "PKRW":
+            buildingCode = buildingCode + ", formerly known as Third Street Towers"
+        elif building == "CREC":
+            buildingCode = buildingCode + ", also known as the Co Rec"
+        building = "BHEE"
+        buildingDots = [char for char in building]
+        buildingD = '.'.join(buildingDots)
+        if building != None:
+            speak_output = str(buildingD) + " is " + str(buildingCode) + "."
             return (
                 handler_input.response_builder
                 .speak(speak_output)
@@ -169,7 +194,7 @@ class HelpIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "You can ask about anything from the student calendar, about today's meals, and building information. What would you like to know?"
+        speak_output = "You can say hello to me! How can I help?"
 
         return (
             handler_input.response_builder
@@ -205,7 +230,7 @@ class FallbackIntentHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In FallbackIntentHandler")
-        speech = "Hmm, I'm not sure. What would you like to do?"
+        speech = "Hmm, I'm not sure. You can say Hello or Help. What would you like to do?"
         reprompt = "I didn't catch that. What can I help you with?"
 
         return handler_input.response_builder.speak(speech).ask(reprompt).response
@@ -260,7 +285,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
         # type: (HandlerInput, Exception) -> Response
         logger.error(exception, exc_info=True)
 
-        speak_output = "This is the catch all exception handler. There may have been a syntax or routing error."
+        speak_output = "Uh Oh. There may have been a syntax or routing error."
 
         return (
             handler_input.response_builder
@@ -280,7 +305,8 @@ sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(AcademicCalendarIntentHandler())
 sb.add_request_handler(DiningMenuIntentHandler())
-sb.add_request_handler(DiningTimeIntentHandler())
+sb.add_request_handler(FoodIntentHandler())
+sb.add_request_handler(BuildingIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
