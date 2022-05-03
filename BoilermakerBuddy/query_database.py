@@ -5,7 +5,7 @@ from datetime import datetime
 ##
 # SQL Stuff!
 ##
-DEBUG = 0
+DEBUG = 1
 ##
 # Connecting to database
 ##
@@ -94,29 +94,48 @@ def selectDateGivenDescription(mycursor, event_description):
         print("Failed to insert into MySQL table {}".format(error))
 
 ##
-# Select date given description
+# Select food given mealtime and dining court
 ##
 def selectFoodGivenCourt(mycursor, diningCourt, mealtime):
 
     try:
         # Select data from tables
-        #TODO edit this
-        menuSQL = "SELECT event_date FROM student_calendar WHERE event_description = ;"
-
+        today = date.today()
+        menuSQL = "SELECT food_name FROM dining_courts WHERE court_name = '" + diningCourt + "' AND meal_type = '" + mealtime + "' AND meal_date = '" + str(today) +"';"
         mycursor.execute(menuSQL)
 
         menuData = mycursor.fetchall() # returns a list of foods
         if(DEBUG > 0):
             print(menuData)
-            #print(studentCalendarData[0][0])
             print(len(menuData))
         foodString = ""
         for a in range(len(menuData)): #for multiple foods
             if(a > 0): #add comma but not before 1st item
                 foodString = foodString + ", "
-            food = "apples" #TODO get food from menuData list
+            food = menuData[a][0]
             foodString = foodString + food
         return foodString
+
+    except mysql.connector.Error as error:
+        print("Failed to insert into MySQL table {}".format(error))
+
+##
+# Select building given building code
+##
+def selectBuildingGivenCode(mycursor, buildingCode):
+
+    try:
+        menuSQL = "SELECT building_name FROM building_abbreviations WHERE building_abbreviation = '" + buildingCode + "';"
+
+        mycursor.execute(menuSQL)
+
+        buildingData = mycursor.fetchall() # returns a list of foods
+        if(DEBUG > 0):
+            print(buildingData)
+        buildingString = buildingData[0][0]
+        if "Maileen" in buildingString:
+            buildingString = bui
+        return buildingString
 
     except mysql.connector.Error as error:
         print("Failed to insert into MySQL table {}".format(error))
@@ -143,8 +162,13 @@ def queryMenu(diningcourt, mealtime):
     disconnect(mydb, mycursor)
     return foodList
 
+def queryBuilding(buildingCode):
+    mydb, mycursor = connect()
+    buildingName = selectBuildingGivenCode(mycursor, str(buildingCode))
+    disconnect(mydb, mycursor)
+    return buildingName
 if __name__ == "__main__":
     mydb, mycursor = connect()
-    date = selectDateGivenDescription(mycursor, "FINAL EXAMS")
+    date = selectBuildingGivenCode(mycursor, "BHEE")
     print(date)
     disconnect(mydb, mycursor)
