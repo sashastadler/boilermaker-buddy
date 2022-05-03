@@ -92,16 +92,19 @@ class DiningMenuIntentHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
 
-        mealname = None
-        mealname = handler_input.request_envelope.request.intent.slots["mealtime"].value
-        
-        diningCourt = None
-        diningCourt = handler_input.request_envelope.request.intent.slots["diningCourt"].value
-        
-        #return list of foods at mealtime at diningcourt
+        #
+        slotObj = handler_input.request_envelope.request.intent.slots["mealtime"]
+        mealSlot = getValueFromSlot(slotObj)
+        mealname = entity_resolution.resolveMealtime(mealSlot)
 
-        if mealname != None and diningCourt != None:
-            speak_output = "You said " + str(mealname) + " at " + str(diningCourt) + " ."
+        slotObj = handler_input.request_envelope.request.intent.slots["diningCourts"]
+        diningSlot = getValueFromSlot(slotObj)
+        diningC = entity_resolution.resolveCourt(diningSlot)
+        
+        #return list of foods at mealtime at diningc
+
+        if mealname != None and diningC != None:
+            speak_output = "You said " + str(mealname) + " at " + str(diningC) + " ."
             return (
                 handler_input.response_builder
                 .speak(speak_output)
