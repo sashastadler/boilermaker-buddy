@@ -1,9 +1,9 @@
 Metadata-Version: 2.1
 Name: BoilermakerBuddy
-Version: 0.0.1
+Version: 1.0.0
 Summary: ( ͡° ͜ʖ ͡°)
 Home-page: https://github.com/sashastadler/boilermaker-buddy.git
-Author: Roger Phaneuf
+Author: Roger Phaneuf, Grace Drukker, Sasha Stadler
 Author-email: boilermakerbuddy@gmail.com
 License: UNKNOWN
 Platform: UNKNOWN
@@ -24,11 +24,8 @@ Launch the skill with the phrase "Open Boilermaker Buddy" or anything similar. O
 #### Supported topics:
 
 - Academic calendar information
-- Purdue Dining menus*
-- Building information*
-- Club information*
-
-\*In development
+- Purdue Dining menus
+- Building abbreviations
 
 # Developers
 
@@ -64,15 +61,25 @@ The elements of dining_list are then uploaded into our SQL database at the end o
 
 ### Building Information
 
-Building information web scraping is currently in progress.  No information is available about this section.
+The building information is scraped using Selenium with the Chromium webdriver.
+
+We use Selenium to access the table of building abbreviation and building names on the following page: https://www.purdue.edu/physicalfacilities/units/facilities-operations/building-deputies/directory.html
+
+The code then iterates through the entire table, obtaining the building abbreviation and the building name.  If the building abbreviation for a row in the table is split with a comma, it makes a separate entry for each element.  The date is stored in a list of lists called buildingInfo, where each sublist is formatted as such, [Building Abbreviation, Building Name].
+
+The elements of buildingInfo are then uploaded into our SQL database.
 
 ## AWS Lambda
 
 The lambda function is what the Alexa Skill uses to handle user requests using the Alexa Skill SDK. There is one handler for each table of information that is in the SQL database. Additionally, each handler is documented in the JSON configuration file, which also lists the possible utterances that are meant to trigger that handler and the slots (and acceptable slot values and synonyms) for each handler.
 
+A different lambda function called purdueSQLUpdate hosts the webscraping code and will need to be updated via zip file anytime a new version of the code is ready to be pushed to production.  The zip file must contain the code and the libraries that the code uses, as lambda does not have these libraries.
+
+purdueSQLUpdate is triggered by an AWS EventBridge rule called purdueSQLUpdateRule which is configured to run purdueSQLUpdate every day at 12:00AM EST.
+
 ## SQL
 
-A MySQL relational database named boilermakerBuddyDB is used with three tables, with one table storing student calendar information, another storing dining court information, and the last storing building hour information.
+A MySQL relational database named boilermakerBuddyDB is used with three tables, with one table storing student calendar information, another storing dining court information, and the last storing building abbreviation information.
 
 ### Student Calendar Table
 - Name: student_calendar
@@ -80,25 +87,25 @@ A MySQL relational database named boilermakerBuddyDB is used with three tables, 
   - Event Date
     - Description: Date of event entry
     - Name: event_date
-    - Data type: date
+    - Data type: DATE
     - Key: None
     - Constraints: None
   - Event Time 
     - Description: Time of event entry
     - Name: event_time
-    - Data type: time
+    - Data type: TIME
     - Key: None
     - Constraints: None 
   - Event Description
     - Description: Description of event entry
     - Name: event_description
-    - Data type: varchar(150)
+    - Data type: VARCHAR(150)
     - Key: None
     - Constraints: None
   - Event Day of Week
     - Description: Day of week of event (Monday, Tuesday, …)
     - Name: event_dow
-    - Data type: varchar(3)
+    - Data type: VARCHAR(3)
     - Key: None
     - Constraints: None
     
@@ -108,42 +115,56 @@ A MySQL relational database named boilermakerBuddyDB is used with three tables, 
   - Meal Date
     - Description: Date of meal entry
     - Name: meal_date
-    - Data type: date
+    - Data type: DATE
     - Key: None
     - Constraints: NOT NULL
   - Time Range
     - Description: Time range meal is available
     - Name: time_range
-    - Data type: varchar(20)
+    - Data type: VARCHAR(30)
     - Key: None
     - Constraints: NOT NULL
   - Meal Type
     - Description: Type of meal (lunch/breakfast/dinner)
     - Name: meal_type
-    - Data type: varchar(10)
+    - Data type: VARCHAR(30)
     - Key: None
     - Constraints: NOT NULL
   - Court Name
     - Description: Name of dining court (Ford, Wiley, etc.)
     - Name: court_name
-    - Data type: varchar(20)
+    - Data type: VARCHAR(30)
     - Key: None
     - Constraints: NOT NULL
   - Station Name
     - Description: Name of food station (BoilerQ, Sugar Hill, etc.)
     - Name: station_name
-    - Data type: varchar(20)
+    - Data type: VARCHAR(30)
     - Key: None
     - Constraints: NOT NULL
   - Food Name
     - Description: Name of food (Hamburgers, Thin Cut Fries, etc.)
     - Name: food_name
-    - Data type: varchar(20)
+    - Data type: VARCHAR(50)
     - Key: None
     - Constraints: NOT NULL
 
-### Building Hour Information
-In progress…
+### Building Abbreviations Table
+- Name: building_abbreviations
+- Attributes
+  - Building Abbreviation
+    - Description: Abbreviation of building name (HSSE, ARMS, WALC, etc.)
+    - Name: building_abbreviation
+    - Data type: VARCHAR(15)
+    - Key: None
+    - Constraints: NOT NULL
+  - Building Name
+    - Description: Building name (Wilmeth Active Learning Center, Neil Armstrong Hall of Engineering, etc.)
+    - Name: building_name
+    - Data type: VARCHAR(75)
+    - Key: None
+    - Constraints: NOT NULL
+  
 
 For information, inqueries, or any concerns, contact boilermakerbuddy@gmail.com.
 

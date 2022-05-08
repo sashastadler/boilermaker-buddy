@@ -18,8 +18,8 @@ REQUIRES = [
 
 setuptools.setup(
     name="BoilermakerBuddy",
-    version="0.0.1",
-    author="Roger Phaneuf",
+    version="1.0.0",
+    author="Roger Phaneuf, Grace Drukker, Sasha Stadler",
     author_email="boilermakerbuddy@gmail.com",
     description="( ͡° ͜ʖ ͡°)",
     long_description=long_description,
